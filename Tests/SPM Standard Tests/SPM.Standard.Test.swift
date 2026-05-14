@@ -43,7 +43,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
 
     @Test
     func `Package.Requirement.range round-trips through JSON`() throws {
-        let requirement: Package.Requirement = .range(Version.Range("602.0.0"..<"603.0.0"))
+        let requirement: Package.Requirement = "602.0.0"..<"603.0.0"
         let encoded = try JSONEncoder().encode(requirement)
         let decoded = try JSONDecoder().decode(Package.Requirement.self, from: encoded)
         #expect(decoded == requirement)
@@ -90,7 +90,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
         let dependency = Package.Dependency(
             source: .url(
                 "https://github.com/apple/swift-argument-parser.git",
-                .from("1.5.0")
+                from: "1.5.0"
             ),
             name: "swift-argument-parser",
             products: ["ArgumentParser"]
@@ -105,7 +105,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
         let dependency = Package.Dependency(
             source: .registry(
                 Package.Identity(scope: "apple", name: "swift-argument-parser"),
-                .from("1.5.0")
+                from: "1.5.0"
             ),
             name: "swift-argument-parser",
             products: ["ArgumentParser"]
