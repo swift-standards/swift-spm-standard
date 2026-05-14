@@ -25,21 +25,25 @@ extension Package {
     /// a future `swift-package-manager` foundation per the
     /// L1/L2 split research doc.
     ///
-    /// v0.2 surface (this revision): the minimum fields needed by
-    /// `swift-package-graph` for reverse-dependency graph
-    /// construction — ``name``, ``toolsVersion``, ``dependencies``.
+    /// v0.3 surface (this revision): in addition to ``name``,
+    /// ``toolsVersion``, ``dependencies`` (the v0.2 minimum for
+    /// reverse-dependency graph construction), the manifest now
+    /// carries ``products``, ``targets``, and ``platforms`` per
+    /// the L1/L2 split research doc Q4 (status: APPROVED,
+    /// 2026-05-14).
     ///
-    /// Products, targets, supported platforms, and richer
-    /// per-target settings are deferred. The `[Product]` / `[Target]`
-    /// surface is held back pending a structural naming decision
-    /// (cf. the L1/L2 split discussion 2026-05-14): nesting an
-    /// `extension Package.Manifest { struct Product ... }` shadows
-    /// the top-level ``Product`` namespace from within the nested
-    /// type, and the institute principle rejects rename suffixes
-    /// (`ProductDescription` / `Product.Spec` etc.) as workarounds.
-    /// Lands in a later revision when both (a) a consumer beyond
-    /// reverse-dep needs them and (b) the structural choice is
-    /// settled.
+    /// The structural-naming question raised in v0.2 — that
+    /// nesting `extension Package.Manifest { struct Product ... }`
+    /// shadows the top-level ``Product`` namespace — is resolved
+    /// via a per-file `private typealias` to the outer namespaces
+    /// (one isolated alias per shadow-bearing file). The public
+    /// surface continues to read `Product.Name`, `Product.Kind`,
+    /// `Target.Name`, `Target.Kind`, `Target.Dependency` without
+    /// rename suffixes.
+    ///
+    /// Per-target settings, resources, plugin usages, swift /
+    /// C / C++ language modes, and registry-form package kinds
+    /// are deferred to later additive versions.
     public struct Manifest: Swift.Sendable, Swift.Hashable {
         /// The package's name — the value of the `Package(name:)`
         /// field in `Package.swift`. Tagged for cross-package
@@ -54,14 +58,37 @@ extension Package {
         /// `.package(...)` clause in the consumer's `Package.swift`.
         public let dependencies: [Package.Dependency]
 
+        /// The package's declared products — one element per
+        /// `.library` / `.executable` / `.plugin` factory in the
+        /// `products:` argument of `Package(...)`.
+        public let products: [Manifest.Product]
+
+        /// The package's declared targets — one element per
+        /// `.target` / `.executableTarget` / `.testTarget` / etc.
+        /// factory in the `targets:` argument of `Package(...)`.
+        public let targets: [Manifest.Target]
+
+        /// The package's declared supported platforms — one
+        /// element per entry in the `platforms:` argument of
+        /// `Package(...)`. `nil` when the manifest did not
+        /// declare a `platforms:` clause (SwiftPM falls back to
+        /// platform defaults).
+        public let platforms: [SupportedPlatform]?
+
         public init(
             name: Package.Name,
             toolsVersion: Version.Tools,
-            dependencies: [Package.Dependency] = []
+            dependencies: [Package.Dependency] = [],
+            products: [Manifest.Product] = [],
+            targets: [Manifest.Target] = [],
+            platforms: [SupportedPlatform]? = nil
         ) {
             self.name = name
             self.toolsVersion = toolsVersion
             self.dependencies = dependencies
+            self.products = products
+            self.targets = targets
+            self.platforms = platforms
         }
     }
 }
