@@ -19,12 +19,12 @@ import Testing
 @Suite
 struct `SPM Standard Tests` {
     @Suite struct Unit {}
-    @Suite struct Codable_RoundTrip {}
+    @Suite struct `Codable Round-Trip` {}
 }
 
 // MARK: - Codable round-trips
 
-extension `SPM Standard Tests`.Codable_RoundTrip {
+extension `SPM Standard Tests`.`Codable Round-Trip` {
     @Test
     func `Package.Identity round-trips through JSON`() throws {
         let identity = Package.Identity(scope: "apple", name: "swift-argument-parser")
