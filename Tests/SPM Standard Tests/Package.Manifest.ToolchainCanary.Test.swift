@@ -27,25 +27,26 @@ extension `SPM Standard Tests` {
     /// SwiftPM that ships a wire-format change (e.g. renaming
     /// `toolsVersion._version` → `toolsVersion.version`).
     ///
-    /// This suite invokes the toolchain's actual `swift package
-    /// dump-package` as a subprocess and feeds its stdout to the
-    /// ``Package/Manifest`` Codable decoder. If a future toolchain
-    /// breaks the wire format, this canary fails IMMEDIATELY rather
-    /// than letting `Workspace.discover` throw `invalidManifestJSON`
-    /// at first real use, possibly months after the breaking
-    /// toolchain landed.
+    /// The canary writes a SYNTHETIC Package.swift to a fresh temp
+    /// directory and invokes the toolchain's `swift package
+    /// dump-package` against it. Running against a synthetic
+    /// fixture (instead of swift-spm-standard's own Package.swift)
+    /// avoids SwiftPM's package-lock contention when the canary
+    /// runs from inside `swift test` on the very package whose
+    /// manifest it would otherwise be dumping.
     @Suite struct `Toolchain Canary` {}
 }
 
 extension `SPM Standard Tests`.`Toolchain Canary` {
     @Test
     func `swift package dump-package output decodes via Package.Manifest Codable`() throws {
-        let packageRoot = try Self._locatePackageRoot()
+        let fixtureRoot = try Self.writeCanaryFixture()
+        defer { try? FileManager.default.removeItem(at: fixtureRoot) }
 
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
         process.arguments = ["swift", "package", "dump-package"]
-        process.currentDirectoryURL = packageRoot
+        process.currentDirectoryURL = fixtureRoot
 
         let stdoutPipe = Pipe()
         let stderrPipe = Pipe()
@@ -54,8 +55,8 @@ extension `SPM Standard Tests`.`Toolchain Canary` {
 
         try process.run()
 
-        // Drain pipes off the run loop while waiting so the
-        // subprocess cannot block on a full pipe buffer.
+        // Drain pipes synchronously so the subprocess cannot block
+        // on a full pipe buffer.
         let stdoutData = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
         let stderrData = stderrPipe.fileHandleForReading.readDataToEndOfFile()
 
@@ -80,39 +81,53 @@ extension `SPM Standard Tests`.`Toolchain Canary` {
         let manifest = try JSONDecoder().decode(
             Package.Manifest.self, from: stdoutData
         )
-        #expect(manifest.name == "swift-spm-standard")
+        #expect(manifest.name == "canary-fixture")
     }
 
-    /// Walks upward from this test file (`#filePath`) until it finds
-    /// a directory containing `Package.swift`. Hard-coded absolute
-    /// paths are forbidden — the test must work from any clone
-    /// location.
-    private static func _locatePackageRoot(
-        filePath: Swift.String = #filePath
-    ) throws -> URL {
-        var url = URL(fileURLWithPath: filePath).deletingLastPathComponent()
+    /// Writes a self-contained, dependency-free SwiftPM package at a
+    /// fresh temp directory and returns its URL. The fixture is
+    /// minimal enough that `swift package dump-package` resolves it
+    /// without consulting any external source — no network, no
+    /// dependency-graph chatter, no contention with whatever outer
+    /// `swift test` invocation may be holding a lock on the
+    /// surrounding workspace.
+    private static func writeCanaryFixture() throws -> URL {
         let fm = FileManager.default
-        // Walk up at most 16 levels — anything deeper indicates
-        // something is structurally wrong.
-        for _ in 0..<16 {
-            let candidate = url.appendingPathComponent("Package.swift")
-            if fm.fileExists(atPath: candidate.path) {
-                return url
-            }
-            let parent = url.deletingLastPathComponent()
-            if parent.path == url.path {
-                break
-            }
-            url = parent
-        }
-        Issue.record(
-            "Could not locate Package.swift walking up from '\(filePath)'"
-        )
-        throw _CanaryError.packageRootNotFound
-    }
+        let root = fm.temporaryDirectory
+            .appendingPathComponent("spm-standard-canary-\(UUID().uuidString)")
+        try fm.createDirectory(at: root, withIntermediateDirectories: true)
 
-    private enum _CanaryError: Swift.Error {
-        case packageRootNotFound
+        let sourcesDir = root
+            .appendingPathComponent("Sources")
+            .appendingPathComponent("canary-fixture")
+        try fm.createDirectory(at: sourcesDir, withIntermediateDirectories: true)
+
+        let placeholderSource = "public let canaryValue: Int = 1\n"
+        try placeholderSource.write(
+            to: sourcesDir.appendingPathComponent("Library.swift"),
+            atomically: true, encoding: .utf8
+        )
+
+        let manifest = """
+        // swift-tools-version: 6.3.1
+        import PackageDescription
+
+        let package = Package(
+            name: "canary-fixture",
+            products: [
+                .library(name: "canary-fixture", targets: ["canary-fixture"])
+            ],
+            targets: [
+                .target(name: "canary-fixture", path: "Sources/canary-fixture")
+            ]
+        )
+        """
+        try manifest.write(
+            to: root.appendingPathComponent("Package.swift"),
+            atomically: true, encoding: .utf8
+        )
+
+        return root
     }
 }
 // swiftlint:enable no_foundation_import_warning typed_throws_required
