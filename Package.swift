@@ -26,7 +26,8 @@ let package = Package(
             name: "SPM Standard",
             dependencies: [
                 .product(name: "Package Primitives", package: "swift-package-primitives"),
-                .product(name: "Version Primitives", package: "swift-version-primitives")
+                .product(name: "Version Primitives", package: "swift-version-primitives"),
+                .product(name: "Version Primitives Standard Library Integration", package: "swift-version-primitives")
             ]
         ),
         .testTarget(

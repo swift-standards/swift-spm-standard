@@ -35,7 +35,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
 
     @Test
     func `Package.Requirement.from round-trips through JSON`() throws {
-        let requirement = Package.Requirement.from(try Version.Semantic(parsing: "1.5.0"))
+        let requirement: Package.Requirement = .from("1.5.0")
         let encoded = try JSONEncoder().encode(requirement)
         let decoded = try JSONDecoder().decode(Package.Requirement.self, from: encoded)
         #expect(decoded == requirement)
@@ -43,13 +43,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
 
     @Test
     func `Package.Requirement.range round-trips through JSON`() throws {
-        let lower = try Version.Semantic(parsing: "602.0.0")
-        let upper = try Version.Semantic(parsing: "603.0.0")
-        let range = Version.Range<Version.Semantic>(
-            lowerBound: .inclusive(lower),
-            upperBound: .exclusive(upper)
-        )
-        let requirement = Package.Requirement.range(range)
+        let requirement: Package.Requirement = .range(Version.Range("602.0.0"..<"603.0.0"))
         let encoded = try JSONEncoder().encode(requirement)
         let decoded = try JSONDecoder().decode(Package.Requirement.self, from: encoded)
         #expect(decoded == requirement)
@@ -57,7 +51,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
 
     @Test
     func `Package.Requirement.exact round-trips through JSON`() throws {
-        let requirement = Package.Requirement.exact(try Version.Semantic(parsing: "1.0.0"))
+        let requirement: Package.Requirement = .exact("1.0.0")
         let encoded = try JSONEncoder().encode(requirement)
         let decoded = try JSONDecoder().decode(Package.Requirement.self, from: encoded)
         #expect(decoded == requirement)
@@ -96,7 +90,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
         let dependency = Package.Dependency(
             source: .url(
                 "https://github.com/apple/swift-argument-parser.git",
-                .from(try Version.Semantic(parsing: "1.5.0"))
+                .from("1.5.0")
             ),
             name: "swift-argument-parser",
             products: ["ArgumentParser"]
@@ -111,7 +105,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
         let dependency = Package.Dependency(
             source: .registry(
                 Package.Identity(scope: "apple", name: "swift-argument-parser"),
-                .from(try Version.Semantic(parsing: "1.5.0"))
+                .from("1.5.0")
             ),
             name: "swift-argument-parser",
             products: ["ArgumentParser"]

@@ -21,3 +21,4 @@
 
 @_exported public import Package_Primitives
 @_exported public import Version_Primitives
+@_exported public import Version_Primitives_Standard_Library_Integration
