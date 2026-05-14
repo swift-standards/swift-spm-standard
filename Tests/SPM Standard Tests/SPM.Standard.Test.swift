@@ -127,7 +127,7 @@ extension `SPM Standard Tests`.Unit {
     }
 
     @Test
-    func `Package.Dependency.Source path carries literal string`() {
+    func `Package.Dependency.Source path carries typed Paths.Path`() {
         let source = Package.Dependency.Source.path("/tmp/swift-foo")
         switch source {
         case .path(let path):

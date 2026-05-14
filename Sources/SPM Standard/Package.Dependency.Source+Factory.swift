@@ -37,7 +37,7 @@ extension Package.Dependency.Source {
     /// `.package(url: "…", from: "X.Y.Z")` form.
     @inlinable
     public static func url(
-        _ url: Swift.String,
+        _ url: URI,
         from version: Version.Semantic
     ) -> Self {
         .url(url, .from(version))
@@ -46,7 +46,7 @@ extension Package.Dependency.Source {
     /// `.package(url: "…", exact: "X.Y.Z")` form.
     @inlinable
     public static func url(
-        _ url: Swift.String,
+        _ url: URI,
         exact version: Version.Semantic
     ) -> Self {
         .url(url, .exact(version))
@@ -55,7 +55,7 @@ extension Package.Dependency.Source {
     /// `.package(url: "…", branch: "…")` form.
     @inlinable
     public static func url(
-        _ url: Swift.String,
+        _ url: URI,
         branch: Swift.String
     ) -> Self {
         .url(url, .branch(branch))
@@ -64,7 +64,7 @@ extension Package.Dependency.Source {
     /// `.package(url: "…", revision: "…")` form.
     @inlinable
     public static func url(
-        _ url: Swift.String,
+        _ url: URI,
         revision: Swift.String
     ) -> Self {
         .url(url, .revision(revision))

@@ -38,18 +38,17 @@ extension Package {
         ///   ``Requirement`` constraint.
         public enum Source: Swift.Sendable, Swift.Hashable {
             /// Path-form: `.package(path: "...")`. The associated
-            /// string is the literal path as written in the
-            /// consumer's `Package.swift`; relative-path semantics
-            /// and any rewriting (e.g., when emitting the path from
-            /// a different vantage) are the consumer's
-            /// responsibility.
-            case path(Swift.String)
+            /// value is the typed ``Paths/Path`` for the sibling-disk
+            /// dependency. Relative-path semantics and any rewriting
+            /// (e.g., when emitting the path from a different vantage)
+            /// are the consumer's responsibility.
+            case path(Paths.Path)
 
             /// URL-form with a typed version constraint:
-            /// `.package(url: "...", ...)`. The URL is the literal
-            /// string the consumer wrote; the requirement is the
-            /// typed shape per ``Package/Requirement``.
-            case url(Swift.String, Package.Requirement)
+            /// `.package(url: "...", ...)`. The URL is the typed
+            /// ``URI`` per RFC 3986; the requirement is the typed
+            /// shape per ``Package/Requirement``.
+            case url(URI, Package.Requirement)
 
             /// Registry-form per SE-0292:
             /// `.package(id: "scope.name", ...)`. The identity is

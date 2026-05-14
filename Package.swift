@@ -19,7 +19,9 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../../swift-primitives/swift-package-primitives"),
-        .package(path: "../../swift-primitives/swift-version-primitives")
+        .package(path: "../../swift-primitives/swift-version-primitives"),
+        .package(path: "../../swift-foundations/swift-paths"),
+        .package(path: "../swift-uri-standard")
     ],
     targets: [
         .target(
@@ -27,7 +29,10 @@ let package = Package(
             dependencies: [
                 .product(name: "Package Primitives", package: "swift-package-primitives"),
                 .product(name: "Version Primitives", package: "swift-version-primitives"),
-                .product(name: "Version Primitives Standard Library Integration", package: "swift-version-primitives")
+                .product(name: "Version Primitives Standard Library Integration", package: "swift-version-primitives"),
+                .product(name: "Paths", package: "swift-paths"),
+                .product(name: "URI Standard", package: "swift-uri-standard"),
+                .product(name: "URI Standard Library Integration", package: "swift-uri-standard")
             ]
         ),
         .testTarget(

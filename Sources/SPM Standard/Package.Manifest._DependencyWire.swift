@@ -36,13 +36,13 @@ extension Package.Manifest {
             switch dependency.source {
             case .path(let path):
                 self.init(fileSystem: [
-                    _FileSystemRecord(identity: dependency.name.underlying, path: path)
+                    _FileSystemRecord(identity: dependency.name.underlying, path: path.string)
                 ])
             case .url(let url, let requirement):
                 self.init(sourceControl: [
                     _SourceControlRecord(
                         identity: dependency.name.underlying,
-                        location: .init(remote: [.init(urlString: url)]),
+                        location: .init(remote: [.init(urlString: url.value)]),
                         requirement: _RequirementWire(from: requirement)
                     )
                 ])
@@ -58,17 +58,39 @@ extension Package.Manifest {
 
         func toDependency() throws -> Package.Dependency {
             if let record = fileSystem?.first {
+                let path: Paths.Path
+                do {
+                    path = try Paths.Path(record.path)
+                } catch {
+                    throw DecodingError.dataCorrupted(
+                        DecodingError.Context(
+                            codingPath: [],
+                            debugDescription: "Invalid path '\(record.path)' in fileSystem dependency: \(error)"
+                        )
+                    )
+                }
                 return Package.Dependency(
-                    source: .path(record.path),
+                    source: .path(path),
                     name: Package.Name(_unchecked: record.identity),
                     products: []
                 )
             }
             if let record = sourceControl?.first {
                 let urlString = record.location.remote.first?.urlString ?? ""
+                let url: URI
+                do {
+                    url = try URI(urlString)
+                } catch {
+                    throw DecodingError.dataCorrupted(
+                        DecodingError.Context(
+                            codingPath: [],
+                            debugDescription: "Invalid URI '\(urlString)' in sourceControl dependency: \(error)"
+                        )
+                    )
+                }
                 let requirement = try record.requirement.toRequirement()
                 return Package.Dependency(
-                    source: .url(urlString, requirement),
+                    source: .url(url, requirement),
                     name: Package.Name(_unchecked: record.identity),
                     products: []
                 )
