@@ -18,10 +18,10 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(path: "../../swift-primitives/swift-package-primitives"),
-        .package(path: "../../swift-primitives/swift-version-primitives"),
-        .package(path: "../../swift-foundations/swift-paths"),
-        .package(path: "../swift-uri-standard")
+        .package(url: "https://github.com/swift-primitives/swift-package-primitives.git", branch: "main"),
+        .package(url: "https://github.com/swift-primitives/swift-version-primitives.git", branch: "main"),
+        .package(url: "https://github.com/swift-foundations/swift-paths.git", branch: "main"),
+        .package(url: "https://github.com/swift-standards/swift-uri-standard.git", branch: "main")
     ],
     targets: [
         .target(
