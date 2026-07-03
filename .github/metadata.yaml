@@ -1,0 +1,7 @@
+description: Swift implementation of the Swift Package Manager package model.
+topics:
+  - standards
+  - package-manager
+  - manifest
+  - dependency
+homepage: https://swift-institute.org
