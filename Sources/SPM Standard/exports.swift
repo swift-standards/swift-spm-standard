@@ -28,8 +28,8 @@
 //   `.url("https://…", from: "1.0.0")` literals.
 
 @_exported public import Package_Primitives
-@_exported public import Version_Primitives
-@_exported public import Version_Primitives_Standard_Library_Integration
 @_exported public import Paths
 @_exported public import URI_Standard
 @_exported public import URI_Standard_Library_Integration
+@_exported public import Version_Primitives
+@_exported public import Version_Primitives_Standard_Library_Integration

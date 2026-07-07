@@ -26,6 +26,7 @@
 // via the stdlib overload (Swift picks by result-type context).
 
 /// `..<` overload returning `Package.Requirement.range(...)`.
+///
 /// Wraps the half-open `lower..<upper` range produced by the
 /// stdlib operator into the typed `Version.Range` payload, then
 /// the `.range(_)` case.
@@ -37,11 +38,12 @@
 /// is `Package.Requirement`.
 @inlinable
 public func ..< (
-    lower: Version.Semantic,
-    upper: Version.Semantic
+  lower: Version.Semantic,
+  upper: Version.Semantic
 ) -> Package.Requirement {
-    .range(Version.Range(
-        lowerBound: .inclusive(lower),
-        upperBound: .exclusive(upper)
+  .range(
+    Version.Range(
+      lowerBound: .inclusive(lower),
+      upperBound: .exclusive(upper)
     ))
 }
