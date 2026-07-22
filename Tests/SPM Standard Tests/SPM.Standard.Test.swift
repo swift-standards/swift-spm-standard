@@ -127,7 +127,7 @@ extension `SPM Standard Tests`.Unit {
   }
 
   @Test
-  func `Package.Dependency.Source path carries typed Paths.Path`() {
+  func `Package.Dependency.Source path carries SwiftPM path string`() {
     let source = Package.Dependency.Source.path("/tmp/swift-foo")
     switch source {
     case .path(let path):

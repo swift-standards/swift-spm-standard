@@ -40,11 +40,10 @@ extension Package {
     ///   ``Requirement`` constraint.
     public enum Source: Swift.Sendable, Swift.Hashable {
       /// Path-form: `.package(path: "...")`. The associated
-      /// value is the typed ``Paths/Path`` for the sibling-disk
-      /// dependency. Relative-path semantics and any rewriting
-      /// (for example, when emitting the path from a different vantage)
-      /// are the consumer's responsibility.
-      case path(Paths.Path)
+      /// value is SwiftPM's path string. Validation, resolution, and
+      /// rewriting from a particular filesystem vantage belong to an
+      /// operational foundation.
+      case path(Swift.String)
 
       /// URL-form with a typed version constraint:
       /// `.package(url: "...", ...)`. The URL is the typed

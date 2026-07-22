@@ -34,7 +34,7 @@ extension Package.Manifest {
       switch dependency.source {
       case .path(let path):
         self.init(fileSystem: [
-          _FileSystemRecord(identity: dependency.name.underlying, path: path.string)
+          _FileSystemRecord(identity: dependency.name.underlying, path: path)
         ])
       case .url(let url, let requirement):
         self.init(sourceControl: [
@@ -56,19 +56,8 @@ extension Package.Manifest {
 
     func toDependency() throws -> Package.Dependency {
       if let record = fileSystem?.first {
-        let path: Paths.Path
-        do {
-          path = try Paths.Path(record.path)
-        } catch {
-          throw DecodingError.dataCorrupted(
-            DecodingError.Context(
-              codingPath: [],
-              debugDescription: "Invalid path '\(record.path)' in fileSystem dependency: \(error)"
-            )
-          )
-        }
         return Package.Dependency(
-          source: .path(path),
+          source: .path(record.path),
           name: Package.Name(_unchecked: record.identity),
           products: []
         )

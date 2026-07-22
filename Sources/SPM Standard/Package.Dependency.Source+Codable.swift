@@ -46,18 +46,7 @@
       let kind = try container.decode(Kind.self, forKey: .kind)
       switch kind {
       case .path:
-        let pathString = try container.decode(Swift.String.self, forKey: .path)
-        let path: Paths.Path
-        do {
-          path = try Paths.Path(pathString)
-        } catch {
-          throw DecodingError.dataCorruptedError(
-            forKey: .path,
-            in: container,
-            debugDescription: "Invalid path '\(pathString)': \(error)"
-          )
-        }
-        self = .path(path)
+        self = .path(try container.decode(Swift.String.self, forKey: .path))
       case .url:
         let urlString = try container.decode(Swift.String.self, forKey: .url)
         let url: URI
@@ -84,7 +73,7 @@
       switch self {
       case .path(let path):
         try container.encode(Kind.path, forKey: .kind)
-        try container.encode(path.string, forKey: .path)
+        try container.encode(path, forKey: .path)
       case .url(let url, let requirement):
         try container.encode(Kind.url, forKey: .kind)
         try container.encode(url.value, forKey: .url)

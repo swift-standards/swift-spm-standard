@@ -20,7 +20,6 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/swift-primitives/swift-package-primitives.git", branch: "main"),
         .package(url: "https://github.com/swift-primitives/swift-version-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-foundations/swift-paths.git", branch: "main"),
         .package(url: "https://github.com/swift-standards/swift-uri-standard.git", branch: "main")
     ],
     targets: [
@@ -30,7 +29,6 @@ let package = Package(
                 .product(name: "Package Primitives", package: "swift-package-primitives"),
                 .product(name: "Version Primitives", package: "swift-version-primitives"),
                 .product(name: "Version Primitives Standard Library Integration", package: "swift-version-primitives"),
-                .product(name: "Paths", package: "swift-paths"),
                 .product(name: "URI Standard", package: "swift-uri-standard"),
                 .product(name: "URI Standard Library Integration", package: "swift-uri-standard")
             ]
