@@ -72,10 +72,10 @@ extension Package.Dependency {
 // [API-IMPL-008]: projections live in an extension, not the type body.
 
 extension Package.Dependency.Evaluation {
-    /// The identity token SwiftPM emitted. See ``Source/identity``.
-    public var identity: Identity { source.identity }
+  /// The identity token SwiftPM emitted. See ``Source/identity``.
+  public var identity: Identity { source.identity }
 
-    /// The dependency requirement, or `nil` for a filesystem dependency.
-    /// See ``Source/requirement``.
-    public var requirement: Package.Requirement? { source.requirement }
+  /// The dependency requirement, or `nil` for a filesystem dependency.
+  /// See ``Source/requirement``.
+  public var requirement: Package.Requirement? { source.requirement }
 }
