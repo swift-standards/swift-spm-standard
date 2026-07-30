@@ -418,7 +418,7 @@ extension `SPM Standard Tests`.Evaluation {
 
   @Test
   func `absent dependency discriminator is rejected`() throws {
-    let data = try #require(#"{"productFilter": null}"#.data(using: .utf8))
+    let data = Data(#"{"productFilter": null}"#.utf8)
     #expect(throws: (any Swift.Error).self) {
       _ = try JSONDecoder().decode(Package.Dependency.Evaluation.self, from: data)
     }

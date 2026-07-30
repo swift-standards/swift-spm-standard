@@ -44,8 +44,8 @@ extension `SPM Standard Tests`.`Toolchain Canary` {
     defer { try? FileManager.default.removeItem(at: fixtureRoot) }
 
     let process = Process()
-    process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-    process.arguments = ["swift", "package", "dump-package"]
+    process.executableURL = URL(fileURLWithPath: try Self.resolveSwiftExecutable())
+    process.arguments = ["package", "dump-package"]
     process.currentDirectoryURL = fixtureRoot
 
     let stdoutPipe = Pipe()
@@ -129,5 +129,52 @@ extension `SPM Standard Tests`.`Toolchain Canary` {
     )
 
     return root
+  }
+
+  /// Locates the `swift` executable via `PATH`.
+  ///
+  /// `/usr/bin/env swift` (the POSIX shortcut) does not exist on Windows, and the
+  /// gating `Windows (Swift 6.3, debug)` CI leg failed exactly there
+  /// (`NSCocoaErrorDomain Code=260 "The file doesn't exist."`, `WindowsError Code=2`)
+  /// before this canary ever reached `swift package dump-package`. Walk `PATH`
+  /// (`Path` on Windows) ourselves instead of relying on a POSIX-only shim.
+  private static func resolveSwiftExecutable() throws -> String {
+    #if os(Windows)
+      let executableName = "swift.exe"
+      let pathSeparator: Character = ";"
+    #else
+      let executableName = "swift"
+      let pathSeparator: Character = ":"
+    #endif
+
+    let environment = ProcessInfo.processInfo.environment
+    guard let pathVariable = environment["PATH"] ?? environment["Path"] else {
+      throw ToolchainCanaryError.pathNotSet
+    }
+
+    let fm = FileManager.default
+    for directory in pathVariable.split(separator: pathSeparator) {
+      let candidate = URL(fileURLWithPath: String(directory)).appendingPathComponent(
+        executableName
+      )
+      if fm.isExecutableFile(atPath: candidate.path) {
+        return candidate.path
+      }
+    }
+    throw ToolchainCanaryError.swiftExecutableNotFound
+  }
+
+  private enum ToolchainCanaryError: Swift.Error, CustomStringConvertible {
+    case pathNotSet
+    case swiftExecutableNotFound
+
+    var description: String {
+      switch self {
+      case .pathNotSet:
+        return "Neither PATH nor Path is set in the process environment."
+      case .swiftExecutableNotFound:
+        return "Could not locate a swift executable on PATH."
+      }
+    }
   }
 }
