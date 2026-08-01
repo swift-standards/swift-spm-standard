@@ -48,6 +48,8 @@
 
     public func encode(to encoder: any Encoder) throws {
       var container = encoder.container(keyedBy: CodingKeys.self)
+      // swift-linter:disable:next raw value access
+      // REASON: same-package Codable witness serializing the enum's own wire-format code.
       try container.encode(self.platform.rawValue, forKey: .platformName)
       try container.encode(self.version, forKey: .version)
       // Emit an empty `options` array to match the

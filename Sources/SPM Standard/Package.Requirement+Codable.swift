@@ -48,15 +48,6 @@
       case revision
     }
 
-    private enum Kind: Swift.String, Codable {
-      case from
-      case upToNextMajor
-      case upToNextMinor
-      case range
-      case exact
-      case branch
-      case revision
-    }
 
     public init(from decoder: any Decoder) throws {
       let container = try decoder.container(keyedBy: CodingKeys.self)

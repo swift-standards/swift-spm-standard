@@ -20,6 +20,8 @@ import Testing
 struct `SPM Standard Tests` {
   @Suite struct Unit {}
   @Suite struct `Codable Round-Trip` {}
+  @Suite struct `Edge Case` {}
+  @Suite struct Integration {}
 }
 
 // MARK: - Codable round-trips

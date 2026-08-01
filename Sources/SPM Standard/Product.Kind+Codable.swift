@@ -72,6 +72,8 @@
       var container = encoder.container(keyedBy: CodingKeys.self)
       switch self {
       case .library(let linkKind):
+        // swift-linter:disable:next raw value access
+        // REASON: same-package Codable witness serializing the enum's own wire-format code.
         try container.encode([linkKind.rawValue], forKey: .library)
       case .executable:
         try container.encodeNil(forKey: .executable)

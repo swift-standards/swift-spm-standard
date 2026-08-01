@@ -76,6 +76,8 @@
     public func encode(to encoder: any Encoder) throws {
       var container = encoder.container(keyedBy: CodingKeys.self)
       try container.encode(self.name.underlying, forKey: .name)
+      // swift-linter:disable:next raw value access
+      // REASON: same-package Codable witness serializing the enum's own wire-format code.
       try container.encode(self.kind.rawValue, forKey: .type)
       try container.encode(self.dependencies, forKey: .dependencies)
       try container.encodeIfPresent(self.path, forKey: .path)

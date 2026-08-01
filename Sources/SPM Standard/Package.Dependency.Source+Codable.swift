@@ -35,12 +35,6 @@
       case requirement
     }
 
-    private enum Kind: Swift.String, Codable {
-      case path
-      case url
-      case registry
-    }
-
     public init(from decoder: any Decoder) throws {
       let container = try decoder.container(keyedBy: CodingKeys.self)
       let kind = try container.decode(Kind.self, forKey: .kind)
