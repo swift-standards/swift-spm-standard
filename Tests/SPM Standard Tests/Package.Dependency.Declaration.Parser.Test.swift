@@ -19,7 +19,9 @@ extension `SPM Standard Tests` {
 
 extension `SPM Standard Tests`.`Declaration Parser` {
   @Test
-  func `Parser preserves URL strings and ignores line and nested block comments`() throws(Package.Dependency.Declaration.Parser.Error) {
+  func `Parser preserves URL strings and ignores line and nested block comments`()
+    throws(Package.Dependency.Declaration.Parser.Error)
+  {
     let source = #"""
       let package = Package(
           dependencies: [
@@ -46,7 +48,9 @@ extension `SPM Standard Tests`.`Declaration Parser` {
   }
 
   @Test
-  func `Parser covers every target kind and hoisted product declarations`() throws(Package.Dependency.Declaration.Parser.Error) {
+  func `Parser covers every target kind and hoisted product declarations`()
+    throws(Package.Dependency.Declaration.Parser.Error)
+  {
     let source = #"""
       let hoisted: Target.Dependency = .product(name: "Support", package: "support")
       let package = Package(
@@ -73,7 +77,9 @@ extension `SPM Standard Tests`.`Declaration Parser` {
   }
 
   @Test
-  func `Parser reports path registry dynamic and noncanonical declarations explicitly`() throws(Package.Dependency.Declaration.Parser.Error) {
+  func `Parser reports path registry dynamic and noncanonical declarations explicitly`()
+    throws(Package.Dependency.Declaration.Parser.Error)
+  {
     let source = #"""
       .package(path: ".."),
       .package(id: "example.library", from: "1.0.0"),
