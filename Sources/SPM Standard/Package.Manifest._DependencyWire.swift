@@ -104,6 +104,6 @@ extension Package.Manifest {
         )
       )
     }
-        // swiftlint:enable typed_throws_required
+    // swiftlint:enable typed_throws_required
   }
 }
