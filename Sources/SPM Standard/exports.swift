@@ -23,6 +23,11 @@
 //   SLI provides `ExpressibleByStringLiteral` so consumers can write
 //   `.url("https://…", from: "1.0.0")` literals.
 
+// - `Byte_Primitives` (+ its Standard Library Integration) — `Byte` is the
+//   public input domain of `Package.Dependency.Declaration.Parser`.
+
+@_exported public import Byte_Primitives
+@_exported public import Byte_Primitives_Standard_Library_Integration
 @_exported public import Package_Primitives
 @_exported public import URI_Standard
 @_exported public import URI_Standard_Library_Integration

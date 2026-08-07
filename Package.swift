@@ -18,6 +18,7 @@ let package = Package(
         ),
     ],
     dependencies: [
+        .package(url: "https://github.com/swift-primitives/swift-byte-primitives.git", branch: "main"),
         .package(url: "https://github.com/swift-primitives/swift-package-primitives.git", branch: "main"),
         .package(url: "https://github.com/swift-primitives/swift-version-primitives.git", branch: "main"),
         .package(url: "https://github.com/swift-standards/swift-uri-standard.git", branch: "main")
@@ -26,6 +27,8 @@ let package = Package(
         .target(
             name: "SPM Standard",
             dependencies: [
+                .product(name: "Byte Primitives", package: "swift-byte-primitives"),
+                .product(name: "Byte Primitives Standard Library Integration", package: "swift-byte-primitives"),
                 .product(name: "Package Primitives", package: "swift-package-primitives"),
                 .product(name: "Version Primitives", package: "swift-version-primitives"),
                 .product(name: "Version Primitives Standard Library Integration", package: "swift-version-primitives"),
