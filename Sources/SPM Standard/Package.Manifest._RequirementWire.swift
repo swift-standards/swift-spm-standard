@@ -70,12 +70,12 @@ extension Package.Manifest {
 
       case .upToNextMinor(from: let v):
         let upper = "\(v.major.underlying).\(v.minor.underlying + 1).0"
+        // REASON: DecodingError feeds the untyped Decodable path
+        // swiftlint:disable typed_throws_required
         self.init(range: [_RangeBounds(lowerBound: v.description, upperBound: upper)])
       }
     }
 
-    // REASON: DecodingError feeds the untyped Decodable path
-    // swiftlint:disable:next typed_throws_required
     func toRequirement() throws -> Package.Requirement {
       if let v = exact?.first {
         return .exact(try _parseSemantic(v))
@@ -98,5 +98,6 @@ extension Package.Manifest {
         )
       )
     }
+        // swiftlint:enable typed_throws_required
   }
 }

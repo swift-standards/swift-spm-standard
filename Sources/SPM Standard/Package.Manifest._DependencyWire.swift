@@ -47,6 +47,8 @@ extension Package.Manifest {
         ])
 
       case .registry(let identity, let requirement):
+        // REASON: DecodingError feeds the untyped Decodable path
+        // swiftlint:disable typed_throws_required
         self.init(registry: [
           _RegistryRecord(
             identity: "\(identity.scope).\(identity.name)",
@@ -56,8 +58,6 @@ extension Package.Manifest {
       }
     }
 
-    // REASON: DecodingError feeds the untyped Decodable path
-    // swiftlint:disable:next typed_throws_required
     func toDependency() throws -> Package.Dependency {
       if let record = fileSystem?.first {
         return Package.Dependency(
@@ -104,5 +104,6 @@ extension Package.Manifest {
         )
       )
     }
+        // swiftlint:enable typed_throws_required
   }
 }

@@ -127,13 +127,13 @@
       }
     }
 
+    // REASON: KeyedEncodingContainer.encode is untyped throws
+    // swiftlint:disable typed_throws_required
     private static func encodeBound(
       _ bound: Version.Range<Version.Semantic>.Bound,
       into container: inout KeyedEncodingContainer<CodingKeys>,
       value valueKey: CodingKeys,
       flag flagKey: CodingKeys
-    // REASON: KeyedEncodingContainer.encode is untyped throws
-    // swiftlint:disable:next typed_throws_required
     ) throws {
       switch bound {
       case .inclusive(let version):
@@ -158,5 +158,6 @@
         )
       }
     }
+    // swiftlint:enable typed_throws_required
   }
 #endif
