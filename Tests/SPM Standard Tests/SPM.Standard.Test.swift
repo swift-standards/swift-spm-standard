@@ -134,6 +134,7 @@ extension `SPM Standard Tests`.Unit {
     switch source {
     case .path(let path):
       #expect(path == "/tmp/swift-foo")
+
     default:
       Issue.record("expected .path case")
     }

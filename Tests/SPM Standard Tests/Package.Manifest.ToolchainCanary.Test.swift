@@ -172,6 +172,7 @@ extension `SPM Standard Tests`.`Toolchain Canary` {
       switch self {
       case .pathNotSet:
         return "Neither PATH nor Path is set in the process environment."
+
       case .swiftExecutableNotFound:
         return "Could not locate a swift executable on PATH."
       }

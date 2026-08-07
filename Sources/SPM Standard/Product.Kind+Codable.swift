@@ -75,8 +75,10 @@
         // swift-linter:disable:next raw value access
         // REASON: same-package Codable witness serializing the enum's own wire-format code.
         try container.encode([linkKind.rawValue], forKey: .library)
+
       case .executable:
         try container.encodeNil(forKey: .executable)
+
       case .plugin:
         try container.encodeNil(forKey: .plugin)
       }

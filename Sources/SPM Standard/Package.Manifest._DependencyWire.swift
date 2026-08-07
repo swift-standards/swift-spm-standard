@@ -36,6 +36,7 @@ extension Package.Manifest {
         self.init(fileSystem: [
           _FileSystemRecord(identity: dependency.name.underlying, path: path)
         ])
+
       case .url(let url, let requirement):
         self.init(sourceControl: [
           _SourceControlRecord(
@@ -44,6 +45,7 @@ extension Package.Manifest {
             requirement: _RequirementWire(from: requirement)
           )
         ])
+
       case .registry(let identity, let requirement):
         self.init(registry: [
           _RegistryRecord(
@@ -54,6 +56,8 @@ extension Package.Manifest {
       }
     }
 
+    // REASON: DecodingError feeds the untyped Decodable path
+    // swiftlint:disable:next typed_throws_required
     func toDependency() throws -> Package.Dependency {
       if let record = fileSystem?.first {
         return Package.Dependency(

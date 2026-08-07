@@ -39,6 +39,7 @@
       switch (branch, version) {
       case (.some(let branch), .none):
         self.init(revision: revision, pin: .branch(branch))
+
       case (.none, .some(let version)):
         let semantic: Version.Semantic
         do throws(Version.Semantic.Error) {
@@ -51,6 +52,7 @@
           )
         }
         self.init(revision: revision, pin: .version(semantic))
+
       case (.some, .some):
         throw DecodingError.dataCorruptedError(
           forKey: .branch,
@@ -61,6 +63,7 @@
             both is not a state this model can represent.
             """
         )
+
       case (.none, .none):
         throw DecodingError.dataCorruptedError(
           forKey: .revision,

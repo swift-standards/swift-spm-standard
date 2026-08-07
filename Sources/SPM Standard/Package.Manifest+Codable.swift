@@ -145,6 +145,8 @@
     /// `DecodingError.dataCorrupted` if the parse fails.
     internal static func _parseSemantic(
       _ string: Swift.String
+    // REASON: DecodingError.dataCorrupted feeds the untyped Decodable path
+    // swiftlint:disable:next typed_throws_required
     ) throws -> Version.Semantic {
       do {
         return try Version.Semantic(parsing: string)
@@ -165,6 +167,8 @@
     /// does not match SE-0292 `scope.name`.
     internal static func _parseIdentity(
       _ string: Swift.String
+    // REASON: DecodingError.dataCorrupted feeds the untyped Decodable path
+    // swiftlint:disable:next typed_throws_required
     ) throws -> Package.Identity {
       // Registry identity is "scope.name" per SE-0292.
       guard let dot = string.firstIndex(of: ".") else {

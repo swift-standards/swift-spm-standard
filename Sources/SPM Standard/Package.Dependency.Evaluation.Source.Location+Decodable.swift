@@ -24,10 +24,12 @@
         throw Package.Manifest.Evaluation._corrupt(
           "sourceControl.location has neither 'remote' nor 'local'"
         )
+
       case (.some, .some):
         throw Package.Manifest.Evaluation._corrupt(
           "sourceControl.location is ambiguous — both 'remote' and 'local' are present"
         )
+
       case (.some(let remotes), nil):
         let record = try Package.Manifest.Evaluation._exactlyOne(
           remotes, "sourceControl.location.remote"
@@ -46,6 +48,7 @@
           )
         }
         self = .remote(uri)
+
       case (nil, .some(let paths)):
         let path = try Package.Manifest.Evaluation._exactlyOne(
           paths, "sourceControl.location.local"
