@@ -81,10 +81,12 @@
         // to match the dump-package wire shape verbatim.
         try arm.encodeNil()
         try arm.encodeNil()
+
       case .target(let name):
         var arm = container.nestedUnkeyedContainer(forKey: .target)
         try arm.encode(name.underlying)
         try arm.encodeNil()
+
       case .byName(let name):
         var arm = container.nestedUnkeyedContainer(forKey: .byName)
         try arm.encode(name)

@@ -44,6 +44,7 @@ extension Package.Manifest {
       switch requirement {
       case .exact(let version):
         self.init(exact: [version.description])
+
       case .range(let r):
         let lower: Swift.String
         let upper: Swift.String
@@ -56,15 +57,21 @@ extension Package.Manifest {
         case .unbounded: upper = ""
         }
         self.init(range: [_RangeBounds(lowerBound: lower, upperBound: upper)])
+
       case .branch(let name):
         self.init(branch: [name])
+
       case .revision(let sha):
         self.init(revision: [sha])
+
       case .from(let v), .upToNextMajor(from: let v):
         let upper = "\(v.major.underlying + 1).0.0"
         self.init(range: [_RangeBounds(lowerBound: v.description, upperBound: upper)])
+
       case .upToNextMinor(from: let v):
         let upper = "\(v.major.underlying).\(v.minor.underlying + 1).0"
+        // REASON: DecodingError feeds the untyped Decodable path
+        // swiftlint:disable typed_throws_required
         self.init(range: [_RangeBounds(lowerBound: v.description, upperBound: upper)])
       }
     }
@@ -91,5 +98,6 @@ extension Package.Manifest {
         )
       )
     }
+    // swiftlint:enable typed_throws_required
   }
 }

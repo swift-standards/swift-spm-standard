@@ -140,6 +140,8 @@
   // MARK: - Local parsing helpers
 
   extension Package.Manifest {
+    // REASON: DecodingError.dataCorrupted feeds the untyped Decodable path
+    // swiftlint:disable typed_throws_required
     /// Parse a `"X.Y.Z"` SemVer string from a dump-package wire
     /// record into ``Version/Semantic``. Throws a
     /// `DecodingError.dataCorrupted` if the parse fails.
@@ -157,7 +159,10 @@
         )
       }
     }
+    // swiftlint:enable typed_throws_required
 
+    // REASON: DecodingError.dataCorrupted feeds the untyped Decodable path
+    // swiftlint:disable typed_throws_required
     /// Parse a `"scope.name"` registry identity from a
     /// dump-package wire record into ``Package/Identity``.
     ///
@@ -179,6 +184,7 @@
       let name = Swift.String(string[string.index(after: dot)...])
       return Package.Identity(scope: scope, name: name)
     }
+    // swiftlint:enable typed_throws_required
 
     /// Walk every target's `.product` dependency edge and
     /// back-fill each `Package.Dependency.products` with the

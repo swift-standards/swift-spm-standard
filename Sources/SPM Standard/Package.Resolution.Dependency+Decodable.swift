@@ -60,13 +60,16 @@
         resolved = .sourceControlCheckout(
           try state.decode(Package.Resolution.Checkout.self, forKey: .checkoutState)
         )
+
       case "fileSystem":
         resolved = .fileSystem(path: try state.decode(Swift.String.self, forKey: .path))
+
       case "edited":
         resolved = .edited(
           path: try state.decode(Swift.String.self, forKey: .path),
           basedOn: superseded
         )
+
       default:
         throw DecodingError.dataCorruptedError(
           forKey: .name,
