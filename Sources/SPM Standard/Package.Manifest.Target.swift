@@ -27,62 +27,62 @@
 // L2 nested types.
 
 extension Package.Manifest {
-  /// A typed Swift package target description — one element of
-  /// the `targets[]` array a SwiftPM `Package.swift` declares.
-  ///
-  /// Mirrors `PackageDescription.Target` factories:
-  ///
-  /// ```swift
-  /// .target(name: "X", dependencies: [...], path: "Sources/X")
-  /// .executableTarget(name: "X", dependencies: [...])
-  /// .testTarget(name: "XTests", dependencies: [...])
-  /// .plugin(name: "X", capability: ...)
-  /// .binaryTarget(name: "X", path: ...)
-  /// .systemLibrary(name: "X")
-  /// .macro(name: "X")
-  /// ```
-  ///
-  /// Carries the typed target ``Target/Name``, the
-  /// ``Target/Kind``, and the typed dependency list using
-  /// the existing ``Target/Dependency`` enum (top-level under
-  /// the L1 `Target` namespace).
-  ///
-  /// Nested under ``Package/Manifest`` because the description
-  /// is meaningful only as part of a manifest. The standalone
-  /// L1 ``Target`` namespace owns the universal `Target.Name`
-  /// identifier; this nested type owns the SwiftPM-specific
-  /// description shape.
-  public struct Target: Swift.Sendable, Swift.Hashable {
-    /// The target name — the value of the
-    /// `.target(name:)` / `.executableTarget(name:)` / and similar.
+    /// A typed Swift package target description — one element of
+    /// the `targets[]` array a SwiftPM `Package.swift` declares.
     ///
-    /// field in `Package.swift`.
-    public let name: Package_Primitives.Target.Name
+    /// Mirrors `PackageDescription.Target` factories:
+    ///
+    /// ```swift
+    /// .target(name: "X", dependencies: [...], path: "Sources/X")
+    /// .executableTarget(name: "X", dependencies: [...])
+    /// .testTarget(name: "XTests", dependencies: [...])
+    /// .plugin(name: "X", capability: ...)
+    /// .binaryTarget(name: "X", path: ...)
+    /// .systemLibrary(name: "X")
+    /// .macro(name: "X")
+    /// ```
+    ///
+    /// Carries the typed target ``Target/Name``, the
+    /// ``Target/Kind``, and the typed dependency list using
+    /// the existing ``Target/Dependency`` enum (top-level under
+    /// the L1 `Target` namespace).
+    ///
+    /// Nested under ``Package/Manifest`` because the description
+    /// is meaningful only as part of a manifest. The standalone
+    /// L1 ``Target`` namespace owns the universal `Target.Name`
+    /// identifier; this nested type owns the SwiftPM-specific
+    /// description shape.
+    public struct Target: Swift.Sendable, Swift.Hashable {
+        /// The target name — the value of the
+        /// `.target(name:)` / `.executableTarget(name:)` / and similar.
+        ///
+        /// field in `Package.swift`.
+        public let name: Package_Primitives.Target.Name
 
-    /// The target kind — `.regular`, `.executable`,
-    /// `.test`, `.plugin`, `.binary`, `.system`, `.macro`.
-    public let kind: Package_Primitives.Target.Kind
+        /// The target kind — `.regular`, `.executable`,
+        /// `.test`, `.plugin`, `.binary`, `.system`, `.macro`.
+        public let kind: Package_Primitives.Target.Kind
 
-    /// The target's typed dependencies — `.product`,
-    /// `.target`, or `.byName` form.
-    public let dependencies: [Package_Primitives.Target.Dependency]
+        /// The target's typed dependencies — `.product`,
+        /// `.target`, or `.byName` form.
+        public let dependencies: [Package_Primitives.Target.Dependency]
 
-    /// The optional `path:` override. `nil` when the manifest
-    /// did not declare an explicit path (SwiftPM auto-derives
-    /// `Sources/<name>/`). Consumers needing the resolved path
-    /// do their own derivation.
-    public let path: Swift.String?
+        /// The optional `path:` override. `nil` when the manifest
+        /// did not declare an explicit path (SwiftPM auto-derives
+        /// `Sources/<name>/`). Consumers needing the resolved path
+        /// do their own derivation.
+        public let path: Swift.String?
 
-    public init(
-      name: Package_Primitives.Target.Name,
-      kind: Package_Primitives.Target.Kind,
-      dependencies: [Package_Primitives.Target.Dependency] = [],
-      path: Swift.String? = nil
-    ) {
-      self.name = name
-      self.kind = kind
-      self.dependencies = dependencies
-      self.path = path
+        public init(
+            name: Package_Primitives.Target.Name,
+            kind: Package_Primitives.Target.Kind,
+            dependencies: [Package_Primitives.Target.Dependency] = [],
+            path: Swift.String? = nil
+        ) {
+            self.name = name
+            self.kind = kind
+            self.dependencies = dependencies
+            self.path = path
+        }
     }
-  }
 }

@@ -10,10 +10,10 @@
 // ===----------------------------------------------------------------------===//
 
 extension Package.Manifest.Evaluation {
-  /// Wire-format shim for one entry of a dependency's `traits` array.
-  ///
-  /// JSON shape: `{ "name": "default" }`.
-  internal struct _TraitWire: Decodable {
-    let name: Swift.String
-  }
+    /// Wire-format shim for one entry of a dependency's `traits` array.
+    ///
+    /// JSON shape: `{ "name": "default" }`.
+    internal struct _TraitWire: Decodable {
+        let name: Swift.String
+    }
 }

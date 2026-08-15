@@ -10,12 +10,12 @@
 // ===----------------------------------------------------------------------===//
 
 extension Package.Manifest._SourceControlRecord {
-  /// Wire-format shim for the `location` field of a
-  /// ``_SourceControlRecord``.
-  ///
-  /// JSON shape: `{ "remote": [ { "urlString": "..." } ] }`. The
-  /// nested ``_Remote`` carries the URL itself.
-  internal struct _Location: Codable {
-    let remote: [_Remote]
-  }
+    /// Wire-format shim for the `location` field of a
+    /// ``_SourceControlRecord``.
+    ///
+    /// JSON shape: `{ "remote": [ { "urlString": "..." } ] }`. The
+    /// nested ``_Remote`` carries the URL itself.
+    internal struct _Location: Codable {
+        let remote: [_Remote]
+    }
 }

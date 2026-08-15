@@ -31,16 +31,16 @@
 /// version). Consumers needing typed comparison parse it via
 /// `Version.Semantic` or platform-specific predicates themselves.
 public struct SupportedPlatform: Swift.Sendable, Swift.Hashable {
-  /// The platform — typed via the SwiftPM-mirrored ``Platform``
-  /// enum.
-  public let platform: Platform
+    /// The platform — typed via the SwiftPM-mirrored ``Platform``
+    /// enum.
+    public let platform: Platform
 
-  /// The minimum deployment version as the literal string
-  /// SwiftPM emits (for example, `"26.0"`).
-  public let version: Swift.String
+    /// The minimum deployment version as the literal string
+    /// SwiftPM emits (for example, `"26.0"`).
+    public let version: Swift.String
 
-  public init(platform: Platform, version: Swift.String) {
-    self.platform = platform
-    self.version = version
-  }
+    public init(platform: Platform, version: Swift.String) {
+        self.platform = platform
+        self.version = version
+    }
 }

@@ -10,22 +10,22 @@
 // ===----------------------------------------------------------------------===//
 
 extension Package.Manifest {
-  /// Wire-format shim for one entry in a `registry` dependency
-  /// array within the `swift package dump-package` JSON.
-  ///
-  /// JSON shape:
-  ///
-  /// ```
-  /// {
-  ///   "identity": "scope.name",
-  ///   "requirement": <Requirement wire form>
-  /// }
-  /// ```
-  ///
-  /// Registry identity is `"scope.name"` per SE-0292; the dot
-  /// separator is parsed into ``Package/Identity`` (scope, name).
-  internal struct _RegistryRecord: Codable {
-    let identity: Swift.String
-    let requirement: _RequirementWire
-  }
+    /// Wire-format shim for one entry in a `registry` dependency
+    /// array within the `swift package dump-package` JSON.
+    ///
+    /// JSON shape:
+    ///
+    /// ```
+    /// {
+    ///   "identity": "scope.name",
+    ///   "requirement": <Requirement wire form>
+    /// }
+    /// ```
+    ///
+    /// Registry identity is `"scope.name"` per SE-0292; the dot
+    /// separator is parsed into ``Package/Identity`` (scope, name).
+    internal struct _RegistryRecord: Codable {
+        let identity: Swift.String
+        let requirement: _RequirementWire
+    }
 }
