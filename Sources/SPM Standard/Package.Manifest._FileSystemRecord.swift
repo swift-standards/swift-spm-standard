@@ -10,16 +10,16 @@
 // ===----------------------------------------------------------------------===//
 
 extension Package.Manifest {
-  /// Wire-format shim for one entry in a `fileSystem` dependency
-  /// array within the `swift package dump-package` JSON.
-  ///
-  /// JSON shape:
-  ///
-  /// ```
-  /// { "identity": "swift-foo", "path": "/abs/path/to/swift-foo" }
-  /// ```
-  internal struct _FileSystemRecord: Codable {
-    let identity: Swift.String
-    let path: Swift.String
-  }
+    /// Wire-format shim for one entry in a `fileSystem` dependency
+    /// array within the `swift package dump-package` JSON.
+    ///
+    /// JSON shape:
+    ///
+    /// ```
+    /// { "identity": "swift-foo", "path": "/abs/path/to/swift-foo" }
+    /// ```
+    internal struct _FileSystemRecord: Codable {
+        let identity: Swift.String
+        let path: Swift.String
+    }
 }

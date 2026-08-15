@@ -10,11 +10,11 @@
 // ===----------------------------------------------------------------------===//
 
 extension Package.Manifest._SourceControlRecord._Location {
-  /// Wire-format shim for one entry in the `remote` array of a
-  /// ``_Location``.
-  ///
-  /// JSON shape: `{ "urlString": "https://..." }`.
-  internal struct _Remote: Codable {
-    let urlString: Swift.String
-  }
+    /// Wire-format shim for one entry in the `remote` array of a
+    /// ``_Location``.
+    ///
+    /// JSON shape: `{ "urlString": "https://..." }`.
+    internal struct _Remote: Codable {
+        let urlString: Swift.String
+    }
 }

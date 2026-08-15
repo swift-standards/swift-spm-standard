@@ -32,40 +32,40 @@
 // future change to either cannot break resolution reading.
 
 #if !hasFeature(Embedded)
-  extension Package.Resolution: Decodable {
-    // One key enum spanning both levels of the envelope. A keyed container is
-    // indifferent to cases it does not use, so nesting reuses this type rather
-    // than declaring a second one — which would put two type declarations in a
-    // file that must hold one.
-    private enum CodingKeys: Swift.String, CodingKey {
-      case version
-      case object
-      case dependencies
+    extension Package.Resolution: Decodable {
+        // One key enum spanning both levels of the envelope. A keyed container is
+        // indifferent to cases it does not use, so nesting reuses this type rather
+        // than declaring a second one — which would put two type declarations in a
+        // file that must hold one.
+        private enum CodingKeys: Swift.String, CodingKey {
+            case version
+            case object
+            case dependencies
+        }
+
+        public init(from decoder: any Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            let version = try container.decode(Swift.Int.self, forKey: .version)
+
+            guard version == Package.Resolution.supportedVersion else {
+                throw DecodingError.dataCorruptedError(
+                    forKey: .version,
+                    in: container,
+                    debugDescription: """
+                        Unsupported workspace-state schema version \(version); \
+                        this package models version \(Package.Resolution.supportedVersion). \
+                        Refusing to decode rather than risk misreading a changed layout.
+                        """
+                )
+            }
+
+            let object = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .object)
+            self.init(
+                dependencies: try object.decode(
+                    [Package.Resolution.Dependency].self,
+                    forKey: .dependencies
+                )
+            )
+        }
     }
-
-    public init(from decoder: any Decoder) throws {
-      let container = try decoder.container(keyedBy: CodingKeys.self)
-      let version = try container.decode(Swift.Int.self, forKey: .version)
-
-      guard version == Package.Resolution.supportedVersion else {
-        throw DecodingError.dataCorruptedError(
-          forKey: .version,
-          in: container,
-          debugDescription: """
-            Unsupported workspace-state schema version \(version); \
-            this package models version \(Package.Resolution.supportedVersion). \
-            Refusing to decode rather than risk misreading a changed layout.
-            """
-        )
-      }
-
-      let object = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .object)
-      self.init(
-        dependencies: try object.decode(
-          [Package.Resolution.Dependency].self,
-          forKey: .dependencies
-        )
-      )
-    }
-  }
 #endif

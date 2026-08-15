@@ -10,30 +10,30 @@
 // ===----------------------------------------------------------------------===//
 
 extension Product {
-  /// The link kind of a SwiftPM library product.
-  ///
-  /// Mirrors the second positional argument of
-  /// `PackageDescription.Product.library(name:type:targets:)`:
-  ///
-  /// ```swift
-  /// .library(name: "X", type: .static,    targets: [...])
-  /// .library(name: "X", type: .dynamic,   targets: [...])
-  /// .library(name: "X",                   targets: [...])  // .automatic
-  /// ```
-  ///
-  /// On the `swift package dump-package` wire, the value appears
-  /// as a single-element string array under the `library` key:
-  /// `{"library": ["static" | "dynamic" | "automatic"]}`.
-  public enum LibraryType: Swift.String, Swift.Sendable, Swift.Hashable, Swift.CaseIterable {
-    /// Static library — `.library(name:, type: .static, targets:)`.
-    case `static`
+    /// The link kind of a SwiftPM library product.
+    ///
+    /// Mirrors the second positional argument of
+    /// `PackageDescription.Product.library(name:type:targets:)`:
+    ///
+    /// ```swift
+    /// .library(name: "X", type: .static,    targets: [...])
+    /// .library(name: "X", type: .dynamic,   targets: [...])
+    /// .library(name: "X",                   targets: [...])  // .automatic
+    /// ```
+    ///
+    /// On the `swift package dump-package` wire, the value appears
+    /// as a single-element string array under the `library` key:
+    /// `{"library": ["static" | "dynamic" | "automatic"]}`.
+    public enum LibraryType: Swift.String, Swift.Sendable, Swift.Hashable, Swift.CaseIterable {
+        /// Static library — `.library(name:, type: .static, targets:)`.
+        case `static`
 
-    /// Dynamic library — `.library(name:, type: .dynamic, targets:)`.
-    case `dynamic`
+        /// Dynamic library — `.library(name:, type: .dynamic, targets:)`.
+        case `dynamic`
 
-    /// SwiftPM-chosen link kind — `.library(name:, targets:)` with
-    /// no explicit `type:` argument. SwiftPM picks static or dynamic
-    /// based on the consuming product graph.
-    case automatic
-  }
+        /// SwiftPM-chosen link kind — `.library(name:, targets:)` with
+        /// no explicit `type:` argument. SwiftPM picks static or dynamic
+        /// based on the consuming product graph.
+        case automatic
+    }
 }

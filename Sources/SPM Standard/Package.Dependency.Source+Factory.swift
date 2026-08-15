@@ -32,67 +32,67 @@
 
 extension Package.Dependency.Source {
 
-  // MARK: - URL form
+    // MARK: - URL form
 
-  /// `.package(url: "…", from: "X.Y.Z")` form.
-  @inlinable
-  public static func url(
-    _ url: URI,
-    from version: Version.Semantic
-  ) -> Self {
-    .url(url, .from(version))
-  }
+    /// `.package(url: "…", from: "X.Y.Z")` form.
+    @inlinable
+    public static func url(
+        _ url: URI,
+        from version: Version.Semantic
+    ) -> Self {
+        .url(url, .from(version))
+    }
 
-  /// `.package(url: "…", exact: "X.Y.Z")` form.
-  @inlinable
-  public static func url(
-    _ url: URI,
-    exact version: Version.Semantic
-  ) -> Self {
-    .url(url, .exact(version))
-  }
+    /// `.package(url: "…", exact: "X.Y.Z")` form.
+    @inlinable
+    public static func url(
+        _ url: URI,
+        exact version: Version.Semantic
+    ) -> Self {
+        .url(url, .exact(version))
+    }
 
-  /// `.package(url: "…", branch: "…")` form.
-  @inlinable
-  public static func url(
-    _ url: URI,
-    branch: Swift.String
-  ) -> Self {
-    .url(url, .branch(branch))
-  }
+    /// `.package(url: "…", branch: "…")` form.
+    @inlinable
+    public static func url(
+        _ url: URI,
+        branch: Swift.String
+    ) -> Self {
+        .url(url, .branch(branch))
+    }
 
-  /// `.package(url: "…", revision: "…")` form.
-  @inlinable
-  public static func url(
-    _ url: URI,
-    revision: Swift.String
-  ) -> Self {
-    .url(url, .revision(revision))
-  }
+    /// `.package(url: "…", revision: "…")` form.
+    @inlinable
+    public static func url(
+        _ url: URI,
+        revision: Swift.String
+    ) -> Self {
+        .url(url, .revision(revision))
+    }
 
-  // MARK: - Registry form (SE-0292)
+    // MARK: - Registry form (SE-0292)
 
-  /// `.package(id: "scope.name", from: "X.Y.Z")` form.
-  @inlinable
-  public static func registry(
-    _ identity: Package.Identity,
-    from version: Version.Semantic
-  ) -> Self {
-    .registry(identity, .from(version))
-  }
+    /// `.package(id: "scope.name", from: "X.Y.Z")` form.
+    @inlinable
+    public static func registry(
+        _ identity: Package.Identity,
+        from version: Version.Semantic
+    ) -> Self {
+        .registry(identity, .from(version))
+    }
 
-  /// `.package(id: "scope.name", exact: "X.Y.Z")` form. Registry-form
-  /// deps do not support `branch:` or `revision:` constraints in
-  /// SwiftPM's PackageDescription; only the four version-bearing
-  /// requirements (`from`, `upToNextMajor`, `upToNextMinor`,
-  /// `range`, `exact`) apply. The two `from`-family `Requirement`
-  /// constructors remain accessible via the existing case form
-  /// `.registry(identity, .upToNextMajor(from: …))`.
-  @inlinable
-  public static func registry(
-    _ identity: Package.Identity,
-    exact version: Version.Semantic
-  ) -> Self {
-    .registry(identity, .exact(version))
-  }
+    /// `.package(id: "scope.name", exact: "X.Y.Z")` form. Registry-form
+    /// deps do not support `branch:` or `revision:` constraints in
+    /// SwiftPM's PackageDescription; only the four version-bearing
+    /// requirements (`from`, `upToNextMajor`, `upToNextMinor`,
+    /// `range`, `exact`) apply. The two `from`-family `Requirement`
+    /// constructors remain accessible via the existing case form
+    /// `.registry(identity, .upToNextMajor(from: …))`.
+    @inlinable
+    public static func registry(
+        _ identity: Package.Identity,
+        exact version: Version.Semantic
+    ) -> Self {
+        .registry(identity, .exact(version))
+    }
 }
