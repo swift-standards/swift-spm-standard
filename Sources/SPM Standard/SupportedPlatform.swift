@@ -16,7 +16,7 @@
 ///
 /// ```swift
 /// platforms: [
-///     .macOS(.v26),  .iOS(.v26),  .tvOS(.v26),  .watchOS(.v26)
+///     .macOS(.v27),  .iOS(.v27),  .tvOS(.v27),  .watchOS(.v27)
 /// ]
 /// ```
 ///

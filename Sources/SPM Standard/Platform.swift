@@ -16,7 +16,7 @@
 ///
 /// ```swift
 /// platforms: [
-///     .macOS(.v26), .iOS(.v26), .tvOS(.v26), .watchOS(.v26),
+///     .macOS(.v27), .iOS(.v27), .tvOS(.v27), .watchOS(.v27),
 ///     .visionOS(.v2), .macCatalyst(.v18), .driverKit(.v23),
 ///     .linux, .android(.v34), .windows, .wasi,
 ///     .freeBSD, .openBSD,
