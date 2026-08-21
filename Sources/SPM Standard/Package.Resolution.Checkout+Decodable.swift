@@ -1,26 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
-// See ``Package/Resolution`` for why this is Decodable-only.
-//
-// The pin is decided by **which key is present**, never by the shape of its
-// value. Four of the nine branch names observed on the reference machine are
-// version-shaped (`1.6.1`, `1.10.1`, `1.1.6`, `3.12.5`), so a decoder that
-// sniffed the string would misclassify every one of them.
-//
-// Both keys present, or neither, is rejected. Neither occurs in 26,631 observed
-// records, and both are unrepresentable in ``Package/Resolution/Checkout/Pin``
-// by construction — so a wire that carried either would be describing something
-// this model does not understand, and saying so is better than picking one.
-
 #if !hasFeature(Embedded)
     extension Package.Resolution.Checkout: Decodable {
         private enum CodingKeys: Swift.String, CodingKey {

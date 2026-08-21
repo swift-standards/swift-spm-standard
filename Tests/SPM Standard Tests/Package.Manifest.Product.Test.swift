@@ -1,22 +1,7 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
-// JSON Encoder/Decoder are Foundation-bound and use untyped throws via the
-// Codable protocol — both rules are deliberately exempted across this file.
 import Foundation
 import Testing
 
 @testable import SPM_Standard
-
-// MARK: - Package.Manifest.Product round-trips
 
 extension `SPM Standard Tests`.`Codable Round-Trip` {
     @Test

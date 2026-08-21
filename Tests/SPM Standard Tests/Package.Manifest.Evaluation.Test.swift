@@ -1,32 +1,13 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
-// JSON Decoder is Foundation-bound and uses untyped throws via the Decodable
-// protocol — both rules are deliberately exempted across this file.
 import Foundation
 import Testing
 
 @testable import SPM_Standard
-
-// Every fixture path in this file is the artificial `/fixture/checkouts/<name>`
-// form. No machine, home, or temporary directory appears in any fixture: the
-// shapes are what matter, not where a particular checkout happened to live.
 
 extension `SPM Standard Tests` {
     @Suite struct Evaluation {}
 }
 
 extension `SPM Standard Tests`.Evaluation {
-
-    // MARK: - Helpers
 
     private func decodeDependency(_ json: Swift.String) throws -> Package.Dependency.Evaluation {
         let data = try #require(json.data(using: .utf8))
@@ -37,8 +18,6 @@ extension `SPM Standard Tests`.Evaluation {
         let data = try #require(json.data(using: .utf8))
         return try JSONDecoder().decode(Package.Manifest.Evaluation.self, from: data)
     }
-
-    // MARK: - Remote source control
 
     @Test
     func `remote source control preserves identity, URI, and branch requirement`() throws {
@@ -77,13 +56,10 @@ extension `SPM Standard Tests`.Evaluation {
         }
         #expect(uri.value == "https://github.com/swift-foundations/swift-package-manager.git")
 
-        // It is neither of the other two evaluated kinds.
         if case .fileSystem = evaluation.source { Issue.record("decoded as fileSystem") }
         if case .registry = evaluation.source { Issue.record("decoded as registry") }
         if case .local = location { Issue.record("decoded as local source control") }
     }
-
-    // MARK: - Mirror-transformed local source control
 
     @Test
     func `mirror-transformed local source control preserves path and requirement`() throws {
@@ -104,8 +80,7 @@ extension `SPM Standard Tests`.Evaluation {
         )
 
         #expect(evaluation.identity.underlying == "swift-paths")
-        // The requirement survives mirror substitution — this is what
-        // `Package.Dependency.Source.path` could not carry.
+
         #expect(evaluation.requirement == .branch("main"))
 
         guard case .sourceControl(_, let location, _) = evaluation.source else {
@@ -118,19 +93,13 @@ extension `SPM Standard Tests`.Evaluation {
         }
         #expect(path == "/fixture/checkouts/swift-paths")
 
-        // It remains source control and is not projected onto a filesystem
-        // dependency.
         if case .fileSystem = evaluation.source { Issue.record("projected to fileSystem") }
 
-        // No empty URI, and no fabricated `file://` — the local arm produces no
-        // URI at all.
         if case .remote(let uri) = location {
             Issue.record("fabricated a URI '\(uri.value)' for a local location")
         }
         #expect(!path.hasPrefix("file://"))
     }
-
-    // MARK: - Genuine filesystem dependency
 
     @Test
     func `filesystem dependency preserves path and invents no requirement`() throws {
@@ -155,8 +124,7 @@ extension `SPM Standard Tests`.Evaluation {
             return
         }
         #expect(path == "/fixture/checkouts/swift-css")
-        // The wire carries no requirement for a filesystem dependency and the
-        // decoder must not invent one.
+
         #expect(evaluation.requirement == nil)
         if case .sourceControl = evaluation.source { Issue.record("decoded as source control") }
     }
@@ -185,7 +153,6 @@ extension `SPM Standard Tests`.Evaluation {
             """
         )
 
-        // Same identity token, same path string, different evaluated kind.
         #expect(fileSystem.identity == sourceControl.identity)
         #expect(fileSystem != sourceControl)
         #expect(fileSystem.source != sourceControl.source)
@@ -193,13 +160,6 @@ extension `SPM Standard Tests`.Evaluation {
         #expect(sourceControl.requirement == .branch("main"))
     }
 
-    // MARK: - Invariants encoded in the public type
-
-    /// The requirement lives inside the cases that have one, so these are the
-    /// only values the public API can express. There is no initialiser that
-    /// pairs a filesystem source with a requirement, or a source-control or
-    /// registry source without one — those combinations are unrepresentable
-    /// rather than merely rejected at encode time.
     @Test
     func `public construction cannot express a filesystem requirement`() {
         let source = Package.Dependency.Evaluation.Source.fileSystem(
@@ -229,9 +189,6 @@ extension `SPM Standard Tests`.Evaluation {
         #expect(source.requirement == .exact("1.2.3"))
     }
 
-    /// Registry stores only its `Package.Identity`; the emitted `scope.name`
-    /// token is derived from it. A hand-constructed value therefore cannot hold
-    /// a token that disagrees with its parsed identity.
     @Test
     func `registry identity has one coherent source of truth`() throws {
         let identity = Package.Identity(scope: "apple", name: "swift-argument-parser")
@@ -259,8 +216,6 @@ extension `SPM Standard Tests`.Evaluation {
         }
         #expect(decodedIdentity == identity)
     }
-
-    // MARK: - Invalid source-control locations
 
     @Test(
         arguments: [
@@ -330,18 +285,10 @@ extension `SPM Standard Tests`.Evaluation {
         }
     }
 
-    /// Shared envelope for the rejection cases above, so each case supplies only
-    /// the part under test.
     private static func sourceControlEnvelope(_ body: Swift.String) -> Swift.String {
         #"{"sourceControl": [{"identity": "swift-broken", "# + Swift.String(body.dropFirst()) + "]}"
     }
 
-    /// Positive control for the eleven rejection cases above.
-    ///
-    /// Those cases assert only that decoding *throws*. If the shared envelope
-    /// produced malformed JSON, every one of them would throw a syntax error and
-    /// pass for the wrong reason. This decodes a **valid** body through the
-    /// identical envelope, so a broken envelope fails here.
     @Test
     func `the rejection-case envelope produces decodable JSON for a valid body`() throws {
         let json = Self.sourceControlEnvelope(
@@ -352,8 +299,6 @@ extension `SPM Standard Tests`.Evaluation {
         #expect(evaluation.identity.underlying == "swift-broken")
         #expect(evaluation.requirement == .branch("main"))
     }
-
-    // MARK: - Discriminator cardinality
 
     @Test(
         arguments: [
@@ -428,8 +373,6 @@ extension `SPM Standard Tests`.Evaluation {
         }
     }
 
-    // MARK: - Identity validation
-
     @Test(
         arguments: [
             (
@@ -459,12 +402,6 @@ extension `SPM Standard Tests`.Evaluation {
         }
     }
 
-    // MARK: - Full manifest evaluation
-
-    /// Exercises the evaluation decoder end to end on a fixture carrying all
-    /// three evaluated dependency kinds — including a mirror-transformed local
-    /// source-control location — plus products, targets, and platforms, and the
-    /// target-dependency edges the product back-fill walks.
     @Test
     func `manifest evaluation preserves products, targets, platforms, and back-fill`() throws {
         let evaluation = try decodeManifest(
@@ -554,7 +491,6 @@ extension `SPM Standard Tests`.Evaluation {
             """
         )
 
-        // Manifest-level facts.
         #expect(evaluation.name == "swift-evaluation-fixture")
         #expect(evaluation.toolsVersion == Version.Tools("6.3.3"))
         #expect(evaluation.products.count == 1)
@@ -596,10 +532,9 @@ extension `SPM Standard Tests`.Evaluation {
         )
         #expect(css.requirement == nil)
 
-        // Product back-fill, keyed on the emitted identity token.
         #expect(paths.products == ["Paths"])
         #expect(manager.products == ["Package Manager"])
-        #expect(css.products == ["CSS", "CSS Theming"])  // deterministic, target order
+        #expect(css.products == ["CSS", "CSS Theming"])
         let unreferenced = try #require(byToken["swift-unreferenced"])
         #expect(unreferenced.products.isEmpty)
     }

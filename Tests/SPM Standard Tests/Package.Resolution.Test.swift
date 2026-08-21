@@ -1,32 +1,13 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
-// JSON Decoder is Foundation-bound and uses untyped throws via the Decodable
-// protocol — both rules are deliberately exempted across this file.
 import Foundation
 import Testing
 
 @testable import SPM_Standard
-
-// Every fixture path in this file is the artificial `/fixture/checkouts/<name>`
-// form. No machine, home, or temporary directory appears in any fixture: the
-// shapes are what matter, not where a particular checkout happened to live.
 
 extension `SPM Standard Tests` {
     @Suite struct Resolution {}
 }
 
 extension `SPM Standard Tests`.Resolution {
-
-    // MARK: - Helpers
 
     private func decode(_ json: Swift.String) throws -> Package.Resolution {
         let data = try #require(json.data(using: .utf8))
@@ -51,8 +32,6 @@ extension `SPM Standard Tests`.Resolution {
         """
     }
 
-    // MARK: - Envelope
-
     @Test
     func `the supported schema version decodes`() throws {
         let resolution = try decode(
@@ -63,8 +42,7 @@ extension `SPM Standard Tests`.Resolution {
 
     @Test
     func `an unsupported schema version is refused rather than decoded`() throws {
-        // The version field exists because the layout can change. Proceeding on the
-        // hope that it has not is exactly what this rejects.
+
         #expect(throws: DecodingError.self) {
             _ = try decode(envelope(checkoutRecord, version: 8))
         }
@@ -72,8 +50,7 @@ extension `SPM Standard Tests`.Resolution {
 
     @Test
     func `artifacts and prebuilts are tolerated without being modelled`() throws {
-        // `prebuilts` is a toolchain-keyed build cache and must never reach
-        // materialized-path derivation, but its presence must not break reading.
+
         let json = """
             { "version": 7, "object": {
                 "artifacts": [],
@@ -86,8 +63,6 @@ extension `SPM Standard Tests`.Resolution {
         let resolution = try decode(json)
         #expect(resolution.dependencies.count == 1)
     }
-
-    // MARK: - State is a sum, and the name is the discriminator
 
     @Test
     func `a source control checkout carries a revision and a branch pin`() throws {
@@ -121,9 +96,7 @@ extension `SPM Standard Tests`.Resolution {
 
     @Test
     func `a version-shaped branch name stays a branch`() throws {
-        // The trap this model exists to avoid. Four of the nine branch names
-        // observed on the reference machine are version-shaped, so a decoder that
-        // sniffed the value instead of the key would misclassify every one.
+
         let record = """
             { "packageRef": { "identity": "swift-dependencies", "kind": "localSourceControl",
                               "location": "/fixture/checkouts/swift-dependencies",
@@ -134,7 +107,7 @@ extension `SPM Standard Tests`.Resolution {
             """
         let dependency = try #require(try decode(envelope(record)).dependencies.first)
         #expect(dependency.state.checkout?.pin == .branch("1.6.1"))
-        // Emphatically not the version pin that the same characters would parse as.
+
         #expect(dependency.state.checkout?.pin != .version(try Version.Semantic(parsing: "1.6.1")))
     }
 
@@ -177,8 +150,7 @@ extension `SPM Standard Tests`.Resolution {
 
     @Test
     func `an unmodelled state name is refused rather than guessed`() throws {
-        // `registryDownload` is real in SwiftPM's model but its wire encoding has
-        // never been observed here. Failing names it; guessing would not.
+
         let record = """
             { "packageRef": { "identity": "x", "kind": "registry",
                               "location": "scope.x", "name": "x" },
@@ -188,12 +160,9 @@ extension `SPM Standard Tests`.Resolution {
         #expect(throws: DecodingError.self) { _ = try decode(envelope(record)) }
     }
 
-    // MARK: - Edited state, which is live and has no revision
-
     @Test
     func `an edited dependency decodes and reports no revision`() throws {
-        // 91 such records exist on the reference machine. A reader treating this
-        // case as impossible fails on state that is present today.
+
         let record = """
             { "packageRef": { "identity": "swift-parser-primitives", "kind": "localSourceControl",
                               "location": "/fixture/checkouts/swift-parser-primitives",
@@ -214,17 +183,16 @@ extension `SPM Standard Tests`.Resolution {
             return
         }
         #expect(path == "/fixture/edited/swift-parser-primitives")
-        // The absence of a revision is a fact, not a gap to fill by inference.
+
         #expect(dependency.revision == nil)
-        // The superseded checkout still knows the revision the edit displaced.
+
         #expect(try #require(superseded).checkout.revision == "aaa111")
         #expect(try #require(superseded).checkout.pin == .branch("main"))
     }
 
     @Test
     func `a non-edited dependency may not supersede a checkout`() throws {
-        // Unrepresentable by construction in the model; refused at the wire so a
-        // file expressing it is reported rather than silently narrowed.
+
         let record = """
             { "packageRef": { "identity": "x", "kind": "fileSystem",
                               "location": "/fixture/checkouts/x", "name": "x" },
@@ -239,12 +207,9 @@ extension `SPM Standard Tests`.Resolution {
         #expect(throws: DecodingError.self) { _ = try decode(envelope(record)) }
     }
 
-    // MARK: - Kind and state are independent facts
-
     @Test
     func `kind does not determine state and state does not recover kind`() throws {
-        // Both source-control kinds collapse onto one state name, so neither field
-        // can be derived from the other. Two records, same state, different kinds.
+
         let remote = """
             { "packageRef": { "identity": "a", "kind": "remoteSourceControl",
                               "location": "https://example.invalid/a.git", "name": "a" },
@@ -263,7 +228,7 @@ extension `SPM Standard Tests`.Resolution {
         #expect(resolution.dependencies.count == 2)
         #expect(resolution.dependencies[0].reference.kind == .remoteSourceControl)
         #expect(resolution.dependencies[1].reference.kind == .localSourceControl)
-        // Same state name on both, so state cannot recover kind.
+
         #expect(resolution.dependencies[0].state.checkout != nil)
         #expect(resolution.dependencies[1].state.checkout != nil)
     }

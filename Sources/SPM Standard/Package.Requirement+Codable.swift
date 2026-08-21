@@ -1,40 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
-// Codable conformance is excluded from Embedded Swift — `Codable`
-// depends on stdlib protocols and runtime infrastructure that the
-// Embedded mode does not ship.
-//
-// `Codable`'s protocol requirements force existential coder
-// parameters and untyped `throws`; both rules are deliberately
-// exempted for this file's conformance block.
-//
-// Wire-format shape — discriminated union via "kind" key.
-// Each case carries the typed values inline:
-//
-// ```
-// {"kind":"from","version":"1.2.3"}
-// {"kind":"upToNextMajor","version":"1.2.3"}
-// {"kind":"upToNextMinor","version":"1.2.3"}
-// {"kind":"exact","version":"1.2.3"}
-// {"kind":"range","lower":"1.0.0","lowerInclusive":true,"upper":"2.0.0","upperInclusive":false}
-// {"kind":"branch","branch":"main"}
-// {"kind":"revision","revision":"abc123"}
-// ```
-//
-// `Version.Range<Version.Semantic>` is NOT Codable upstream;
-// this file inlines the range's bounds rather than nesting a
-// Version.Range encoder. v0.2 may refine the wire shape to match
-// `swift package dump-package` output exactly.
-
 #if !hasFeature(Embedded)
     extension Package.Requirement: Codable {
         private enum CodingKeys: Swift.String, CodingKey {
@@ -135,8 +98,6 @@
             }
         }
 
-        // REASON: KeyedEncodingContainer.encode is untyped throws
-        // swiftlint:disable typed_throws_required
         private static func encodeBound(
             _ bound: Version.Range<Version.Semantic>.Bound,
             into container: inout KeyedEncodingContainer<CodingKeys>,
@@ -153,10 +114,7 @@
                 try container.encode(false, forKey: flagKey)
 
             case .unbounded:
-                // v0.1: range deps from SwiftPM are always bounded;
-                // unbounded bounds are not part of the dump-package
-                // wire format. Surface as a data-corruption issue
-                // for callers reaching this branch.
+
                 throw EncodingError.invalidValue(
                     bound,
                     EncodingError.Context(
@@ -167,6 +125,6 @@
                 )
             }
         }
-        // swiftlint:enable typed_throws_required
+
     }
 #endif

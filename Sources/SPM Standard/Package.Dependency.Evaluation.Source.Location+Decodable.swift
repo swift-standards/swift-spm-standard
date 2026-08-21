@@ -1,21 +1,6 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 #if !hasFeature(Embedded)
     extension Package.Dependency.Evaluation.Source.Location {
-        /// Project the wire `location` union onto the typed location, rejecting
-        /// every shape the installed wire contract does not permit.
-        ///
-        /// Per `[PATTERN-012]` the conversion is an initializer on the target
-        /// type, so the canonical conversion site lives with the type it produces.
+
         internal init(
             _ wire: Package.Manifest.Evaluation._SourceControlRecord._Location
         ) throws(DecodingError) {

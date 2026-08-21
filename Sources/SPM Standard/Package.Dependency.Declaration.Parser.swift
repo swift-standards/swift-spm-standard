@@ -1,18 +1,7 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 public import Byte_Primitives
 
 extension Package.Dependency.Declaration {
-    /// A comment- and string-aware parser for manifest package declarations.
+
     public struct Parser: Sendable {
         public init() {}
     }
@@ -20,8 +9,7 @@ extension Package.Dependency.Declaration {
 
 extension Package.Dependency.Declaration.Parser {
     public func parse(_ bytes: [Byte]) throws(Error) -> [Package.Dependency.Declaration] {
-        // swift-linter:disable:next raw value access
-        // REASON: stdlib UTF-8 lexer boundary; Parser's public byte-domain input remains Byte
+
         let source = bytes.map(\.underlying)
         guard Swift.String(validating: source, as: Swift.UTF8.self) != nil else {
             throw .invalidUTF8

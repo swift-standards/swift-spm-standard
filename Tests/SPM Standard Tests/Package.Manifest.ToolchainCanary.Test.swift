@@ -1,39 +1,10 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
-// Foundation `Process`/`Pipe`/`URL` and untyped `throws` from
-// `JSONDecoder.decode` and `Process.run` are deliberately exempted
-// across this file.
 import Foundation
 import Testing
 
 @testable import SPM_Standard
 
-// MARK: - Toolchain wire-format canary
-
 extension `SPM Standard Tests` {
-    /// Forward-looking canary against `swift package dump-package`
-    /// JSON shape drift. The static golden-fixture tests in
-    /// ``SPM Standard Tests/Codable Round-Trip`` freeze the wire
-    /// shape at authoring time — they cannot detect a future
-    /// SwiftPM that ships a wire-format change (for example, renaming
-    /// `toolsVersion._version` → `toolsVersion.version`).
-    ///
-    /// The canary writes a SYNTHETIC Package.swift to a fresh temp
-    /// directory and invokes the toolchain's `swift package
-    /// dump-package` against it. Running against a synthetic
-    /// fixture (instead of swift-spm-standard's own Package.swift)
-    /// avoids SwiftPM's package-lock contention when the canary
-    /// runs from inside `swift test` on the very package whose
-    /// manifest it would otherwise be dumping.
+
     @Suite struct `Toolchain Canary` {}
 }
 
@@ -55,8 +26,6 @@ extension `SPM Standard Tests`.`Toolchain Canary` {
 
         try process.run()
 
-        // Drain pipes synchronously so the subprocess cannot block
-        // on a full pipe buffer.
         let stdoutData = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
         let stderrData = stderrPipe.fileHandleForReading.readDataToEndOfFile()
 
@@ -85,13 +54,6 @@ extension `SPM Standard Tests`.`Toolchain Canary` {
         #expect(manifest.name == "canary-fixture")
     }
 
-    /// Writes a self-contained, dependency-free SwiftPM package at a
-    /// fresh temp directory and returns its URL. The fixture is
-    /// minimal enough that `swift package dump-package` resolves it
-    /// without consulting any external source — no network, no
-    /// dependency-graph chatter, no contention with whatever outer
-    /// `swift test` invocation may be holding a lock on the
-    /// surrounding workspace.
     private static func writeCanaryFixture() throws -> URL {
         let fm = FileManager.default
         let root = fm.temporaryDirectory
@@ -134,13 +96,6 @@ extension `SPM Standard Tests`.`Toolchain Canary` {
         return root
     }
 
-    /// Locates the `swift` executable via `PATH`.
-    ///
-    /// `/usr/bin/env swift` (the POSIX shortcut) does not exist on Windows, and the
-    /// gating `Windows (Swift 6.3, debug)` CI leg failed exactly there
-    /// (`NSCocoaErrorDomain Code=260 "The file doesn't exist."`, `WindowsError Code=2`)
-    /// before this canary ever reached `swift package dump-package`. Walk `PATH`
-    /// (`Path` on Windows) ourselves instead of relying on a POSIX-only shim.
     private static func resolveSwiftExecutable() throws -> String {
         #if os(Windows)
             let executableName = "swift.exe"

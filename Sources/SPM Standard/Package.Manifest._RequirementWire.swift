@@ -1,27 +1,5 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 extension Package.Manifest {
-    /// Wire-format shim for the `requirement` field of a `sourceControl`
-    /// or `registry` dependency entry. Discriminated by single key
-    /// among `exact`, `range`, `branch`, `revision`.
-    ///
-    /// JSON shapes:
-    ///
-    /// ```
-    /// {"exact": ["1.0.0"]}
-    /// {"range": [{"lowerBound": "1.0.0", "upperBound": "2.0.0"}]}
-    /// {"branch": ["main"]}
-    /// {"revision": ["abc123"]}
-    /// ```
+
     internal struct _RequirementWire: Codable {
         let exact: [Swift.String]?
         let range: [_RangeBounds]?
@@ -70,8 +48,7 @@ extension Package.Manifest {
 
             case .upToNextMinor(from: let v):
                 let upper = "\(v.major.underlying).\(v.minor.underlying + 1).0"
-                // REASON: DecodingError feeds the untyped Decodable path
-                // swiftlint:disable typed_throws_required
+
                 self.init(range: [_RangeBounds(lowerBound: v.description, upperBound: upper)])
             }
         }
@@ -98,6 +75,6 @@ extension Package.Manifest {
                 )
             )
         }
-        // swiftlint:enable typed_throws_required
+
     }
 }

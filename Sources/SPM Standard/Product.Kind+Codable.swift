@@ -1,28 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
-// Codable conformance is excluded from Embedded Swift — `Codable`
-// depends on stdlib protocols and runtime infrastructure that the
-// Embedded mode does not ship.
-//
-// Wire-format shape — single-key discriminated union, where the
-// `library` arm carries a single-element string array of the
-// link kind, and `executable` / `plugin` carry `null`:
-//
-// ```
-// {"library":    ["static" | "dynamic" | "automatic"]}
-// {"executable": null}
-// {"plugin":     null}
-// ```
-
 #if !hasFeature(Embedded)
     extension Product.Kind: Codable {
         private enum CodingKeys: Swift.String, CodingKey {
@@ -72,8 +47,7 @@
             var container = encoder.container(keyedBy: CodingKeys.self)
             switch self {
             case .library(let linkKind):
-                // swift-linter:disable:next raw value access
-                // REASON: same-package Codable witness serializing the enum's own wire-format code.
+
                 try container.encode([linkKind.rawValue], forKey: .library)
 
             case .executable:

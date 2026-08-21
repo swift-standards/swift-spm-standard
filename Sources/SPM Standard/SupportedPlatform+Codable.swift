@@ -1,29 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
-// Codable conformance is excluded from Embedded Swift — `Codable`
-// depends on stdlib protocols and runtime infrastructure that the
-// Embedded mode does not ship.
-//
-// Wire-format shape — matches `swift package dump-package`'s
-// `platforms[]` element shape:
-//
-// ```
-// {"options": [], "platformName": "macos", "version": "26.0"}
-// ```
-//
-// The `options` array is currently always empty in dump-package
-// output and is decoded-and-discarded. The ``Platform`` raw value
-// matches the lowercase wire token.
-
 #if !hasFeature(Embedded)
     extension SupportedPlatform: Codable {
         private enum CodingKeys: Swift.String, CodingKey {
@@ -48,12 +22,10 @@
 
         public func encode(to encoder: any Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
-            // swift-linter:disable:next raw value access
-            // REASON: same-package Codable witness serializing the enum's own wire-format code.
+
             try container.encode(self.platform.rawValue, forKey: .platformName)
             try container.encode(self.version, forKey: .version)
-            // Emit an empty `options` array to match the
-            // dump-package wire shape verbatim.
+
             try container.encode([Swift.String](), forKey: .options)
         }
     }

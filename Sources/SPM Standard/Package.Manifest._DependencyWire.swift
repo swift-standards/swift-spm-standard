@@ -1,20 +1,5 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 extension Package.Manifest {
-    /// Wire-format shim for one entry in the `dependencies[]` array
-    /// emitted by `swift package dump-package`. The element is a
-    /// discriminated union — exactly one of `fileSystem`,
-    /// `sourceControl`, or `registry` is non-`nil`. Each carries an
-    /// array of one inner record.
+
     internal struct _DependencyWire: Codable {
         let fileSystem: [_FileSystemRecord]?
         let sourceControl: [_SourceControlRecord]?
@@ -47,8 +32,7 @@ extension Package.Manifest {
                 ])
 
             case .registry(let identity, let requirement):
-                // REASON: DecodingError feeds the untyped Decodable path
-                // swiftlint:disable typed_throws_required
+
                 self.init(registry: [
                     _RegistryRecord(
                         identity: "\(identity.scope).\(identity.name)",
@@ -106,6 +90,6 @@ extension Package.Manifest {
                 )
             )
         }
-        // swiftlint:enable typed_throws_required
+
     }
 }

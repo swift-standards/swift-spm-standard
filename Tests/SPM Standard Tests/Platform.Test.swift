@@ -1,22 +1,7 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
-// JSON Encoder/Decoder are Foundation-bound and use untyped throws via the
-// Codable protocol — both rules are deliberately exempted across this file.
 import Foundation
 import Testing
 
 @testable import SPM_Standard
-
-// MARK: - Platform unit
 
 extension `SPM Standard Tests`.Unit {
     @Test
@@ -36,8 +21,6 @@ extension `SPM Standard Tests`.Unit {
         #expect(Platform.openBSD.rawValue == "openbsd")
     }
 }
-
-// MARK: - SupportedPlatform round-trips
 
 extension `SPM Standard Tests`.`Codable Round-Trip` {
     @Test

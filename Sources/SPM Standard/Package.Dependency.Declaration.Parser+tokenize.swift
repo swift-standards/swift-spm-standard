@@ -1,14 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
 extension Package.Dependency.Declaration.Parser {
     func tokenize(_ bytes: [UInt8]) throws(Error) -> [Token] {
         var tokens = [Token]()
@@ -207,14 +196,14 @@ extension Package.Dependency.Declaration.Parser {
     }
 
     private static let punctuation: Set<UInt8> = [
-        0x2E,  // .
-        0x28,  // (
-        0x29,  // )
-        0x5B,  // [
-        0x5D,  // ]
-        0x7B,  // {
-        0x7D,  // }
-        0x3A,  // :
-        0x2C,  // ,
+        0x2E,
+        0x28,
+        0x29,
+        0x5B,
+        0x5D,
+        0x7B,
+        0x7D,
+        0x3A,
+        0x2C,
     ]
 }

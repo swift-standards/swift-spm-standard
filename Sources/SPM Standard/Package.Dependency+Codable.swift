@@ -1,38 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
-// Codable conformance is excluded from Embedded Swift — `Codable`
-// depends on stdlib protocols and runtime infrastructure that the
-// Embedded mode does not ship.
-//
-// `Codable`'s protocol requirements force existential coder
-// parameters and untyped `throws`; both rules are deliberately
-// exempted for this file's conformance block.
-//
-// Wire-format shape:
-//
-// ```
-// {
-//   "source": {"kind":"path","path":"../swift-foo"} | ... ,
-//   "name": "swift-foo",
-//   "products": ["Foo"]
-// }
-// ```
-//
-// `Package.Name` and `Product.Name` are `Tagged<*, String>` typed
-// identifiers and code as their underlying String value via the
-// Tagged ecosystem's stdlib integration. The `Source` enum's
-// discriminated-union shape is encoded in
-// ``Package/Dependency/Source+Codable``.
-
 #if !hasFeature(Embedded)
     extension Package.Dependency: Codable {
         private enum CodingKeys: Swift.String, CodingKey {

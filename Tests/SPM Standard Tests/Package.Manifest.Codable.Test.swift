@@ -1,32 +1,10 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
-// JSON Encoder/Decoder are Foundation-bound and use untyped throws via the
-// Codable protocol — both rules are deliberately exempted across this file.
 import Foundation
 import Testing
 
 @testable import SPM_Standard
 
-// MARK: - Package.Manifest Codable round-trips
-
 extension `SPM Standard Tests`.`Codable Round-Trip` {
-    // MARK: Decode of real `swift package dump-package` output
 
-    /// Golden fixture: the actual JSON `swift package dump-package` emits
-    /// for a workspace with one path-form dependency. The fixture is
-    /// realistic — carries the full extras footprint
-    /// (`cLanguageStandard`, `cxxLanguageStandard`, `defaultLocalization`,
-    /// `packageKind`, `pkgConfig`, `platforms`, `products`, `targets`,
-    /// `traits`) to exercise the ignore-extras strategy.
     @Test
     func `decodes dump-package output ignoring extras (path-form dep)`() throws {
         let json = """
@@ -287,8 +265,6 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
             Issue.record("dep 2 expected registry")
         }
     }
-
-    // MARK: Round-trip (encode → decode equality)
 
     @Test
     func `Package.Manifest minimal round-trips through JSON`() throws {

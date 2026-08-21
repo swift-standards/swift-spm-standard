@@ -1,38 +1,3 @@
-// ===----------------------------------------------------------------------===//
-//
-// This source file is part of the swift-spm-standard open source project
-//
-// Copyright (c) 2026 Coen ten Thije Boonkkamp and the swift-spm-standard project authors
-// Licensed under Apache License v2.0
-//
-// See LICENSE for license information
-//
-// ===----------------------------------------------------------------------===//
-
-// Codable conformance is excluded from Embedded Swift — `Codable`
-// depends on stdlib protocols and runtime infrastructure that the
-// Embedded mode does not ship.
-//
-// Wire-format shape — matches one element of
-// `swift package dump-package`'s `products[]` array:
-//
-// ```
-// {
-//   "name": "SPM Standard",
-//   "type": {"library": ["automatic"]},  // or {"executable": null} / {"plugin": null}
-//   "targets": ["SPM Standard"],
-//   "settings": []
-// }
-// ```
-//
-// The `settings` array is decoded-and-discarded (v0.3 ignore-extras
-// strategy); per-product settings can be added additively later.
-
-// Shadow-resolution: module-qualified `Package_Primitives.Product`
-// references resolve to L1's outer `Product` namespace inside
-// `extension Package.Manifest.Product` where the unqualified
-// `Product` would rebind to the nested struct.
-
 #if !hasFeature(Embedded)
     extension Package.Manifest.Product: Codable {
         private enum CodingKeys: Swift.String, CodingKey {
