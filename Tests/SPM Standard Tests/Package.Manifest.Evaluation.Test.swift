@@ -29,7 +29,7 @@ extension `SPM Standard Tests`.Evaluation {
                   "identity": "swift-package-manager",
                   "location": {
                     "remote": [
-                      {"urlString": "https://github.com/swift-foundations/swift-package-manager.git"}
+                      {"urlString": "https://github.com/swift-compositions/swift-package-manager.git"}
                     ]
                   },
                   "productFilter": null,
@@ -54,7 +54,7 @@ extension `SPM Standard Tests`.Evaluation {
             Issue.record("expected .remote, got \(location)")
             return
         }
-        #expect(uri.value == "https://github.com/swift-foundations/swift-package-manager.git")
+        #expect(uri.value == "https://github.com/swift-compositions/swift-package-manager.git")
 
         if case .fileSystem = evaluation.source { Issue.record("decoded as fileSystem") }
         if case .registry = evaluation.source { Issue.record("decoded as registry") }
@@ -423,7 +423,7 @@ extension `SPM Standard Tests`.Evaluation {
                 {
                   "sourceControl": [
                     {"identity": "swift-package-manager",
-                     "location": {"remote": [{"urlString": "https://github.com/swift-foundations/swift-package-manager.git"}]},
+                     "location": {"remote": [{"urlString": "https://github.com/swift-compositions/swift-package-manager.git"}]},
                      "productFilter": null,
                      "requirement": {"branch": ["main"]},
                      "traits": [{"name": "default"}]}
@@ -520,7 +520,7 @@ extension `SPM Standard Tests`.Evaluation {
                 == .sourceControl(
                     identity: "swift-package-manager",
                     location: .remote(
-                        URI("https://github.com/swift-foundations/swift-package-manager.git")
+                        URI("https://github.com/swift-compositions/swift-package-manager.git")
                     ),
                     requirement: .branch("main")
                 )

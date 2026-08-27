@@ -10,7 +10,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
             name: "SPM Standard",
             kind: .regular,
             dependencies: [
-                .product(name: "Package Primitives", package: "swift-package-primitives"),
+                .product(name: "Package", package: "swift-package"),
                 .target(name: "Helpers"),
                 .byName("LooseLiteral"),
             ],
@@ -91,7 +91,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
         let json = """
             {
               "dependencies": [
-                {"product": ["Package Primitives", "swift-package-primitives", null, null]},
+                {"product": ["Package", "swift-package", null, null]},
                 {"target": ["SiblingTarget", null]},
                 {"byName": ["LooseLiteral", null]}
               ],
@@ -116,8 +116,8 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
             Issue.record("expected .product dependency")
             return
         }
-        #expect(pName == "Package Primitives")
-        #expect(pkgName == "swift-package-primitives")
+        #expect(pName == "Package")
+        #expect(pkgName == "swift-package")
 
         guard case .target(let tName) = target.dependencies[1] else {
             Issue.record("expected .target dependency")

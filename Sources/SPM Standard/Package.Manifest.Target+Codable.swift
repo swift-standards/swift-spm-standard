@@ -11,7 +11,7 @@
             let container = try decoder.container(keyedBy: CodingKeys.self)
             let nameString = try container.decode(Swift.String.self, forKey: .name)
             let kindRaw = try container.decode(Swift.String.self, forKey: .type)
-            guard let kind = Package_Primitives.Target.Kind(rawValue: kindRaw) else {
+            guard let kind = Package.Target.Kind(rawValue: kindRaw) else {
                 throw DecodingError.dataCorruptedError(
                     forKey: .type,
                     in: container,
@@ -20,12 +20,12 @@
             }
             let dependencies =
                 try container.decodeIfPresent(
-                    [Package_Primitives.Target.Dependency].self,
+                    [Package.Target.Dependency].self,
                     forKey: .dependencies
                 ) ?? []
             let path = try container.decodeIfPresent(Swift.String.self, forKey: .path)
             self.init(
-                name: Package_Primitives.Target.Name(_unchecked: nameString),
+                name: Package.Target.Name(_unchecked: nameString),
                 kind: kind,
                 dependencies: dependencies,
                 path: path

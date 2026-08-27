@@ -2,18 +2,18 @@ extension Package.Manifest {
 
     public struct Target: Swift.Sendable, Swift.Hashable {
 
-        public let name: Package_Primitives.Target.Name
+        public let name: Package.Target.Name
 
-        public let kind: Package_Primitives.Target.Kind
+        public let kind: Package.Target.Kind
 
-        public let dependencies: [Package_Primitives.Target.Dependency]
+        public let dependencies: [Package.Target.Dependency]
 
         public let path: Swift.String?
 
         public init(
-            name: Package_Primitives.Target.Name,
-            kind: Package_Primitives.Target.Kind,
-            dependencies: [Package_Primitives.Target.Dependency] = [],
+            name: Package.Target.Name,
+            kind: Package.Target.Kind,
+            dependencies: [Package.Target.Dependency] = [],
             path: Swift.String? = nil
         ) {
             self.name = name

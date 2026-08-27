@@ -14,8 +14,8 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
               "dependencies": [
                 {
                   "fileSystem": [
-                    {"identity": "swift-package-primitives",
-                     "path": "/abs/swift-package-primitives",
+                    {"identity": "swift-package",
+                     "path": "/abs/swift-package",
                      "productFilter": null,
                      "traits": []}
                   ]
@@ -44,7 +44,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
                   "name": "Consumer",
                   "type": "regular",
                   "dependencies": [
-                    {"product": ["Package Primitives", "swift-package-primitives", null, null]},
+                    {"product": ["Package", "swift-package", null, null]},
                     {"product": ["SwiftSyntax", "swift-syntax", null, null]},
                     {"product": ["SwiftSyntaxBuilder", "swift-syntax", null, null]},
                     {"target": ["LocalSibling", null]},
@@ -69,9 +69,9 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
         #expect(manifest.dependencies.count == 3)
 
         let pkgPrimitivesDep = try #require(
-            manifest.dependencies.first { $0.name == "swift-package-primitives" }
+            manifest.dependencies.first { $0.name == "swift-package" }
         )
-        #expect(pkgPrimitivesDep.products == ["Package Primitives"])
+        #expect(pkgPrimitivesDep.products == ["Package"])
 
         let swiftSyntaxDep = try #require(
             manifest.dependencies.first { $0.name == "swift-syntax" }
@@ -140,8 +140,8 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
               "dependencies": [
                 {
                   "fileSystem": [
-                    {"identity": "swift-package-primitives",
-                     "path": "/abs/swift-package-primitives",
+                    {"identity": "swift-package",
+                     "path": "/abs/swift-package",
                      "productFilter": null,
                      "traits": [{"name": "default"}]}
                   ]
@@ -162,7 +162,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
                 {
                   "name": "SPM Standard", "type": "regular",
                   "dependencies": [
-                    {"product": ["Package Primitives", "swift-package-primitives", null, null]}
+                    {"product": ["Package", "swift-package", null, null]}
                   ],
                   "exclude": [], "resources": [], "settings": [], "packageAccess": true
                 },
@@ -202,7 +202,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
         #expect(platforms[1].platform == .iOS)
 
         #expect(manifest.dependencies.count == 1)
-        #expect(manifest.dependencies[0].products == ["Package Primitives"])
+        #expect(manifest.dependencies[0].products == ["Package"])
     }
 
     @Test

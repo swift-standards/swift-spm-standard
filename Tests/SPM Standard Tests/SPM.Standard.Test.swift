@@ -63,9 +63,9 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
     @Test
     func `Package.Dependency path-form round-trips through JSON`() throws {
         let dependency = Package.Dependency(
-            source: .path("../../swift-primitives/swift-package-primitives"),
-            name: "swift-package-primitives",
-            products: ["Package Primitives"]
+            source: .path("../../swift-molecules/swift-package"),
+            name: "swift-package",
+            products: ["Package"]
         )
         let encoded = try JSONEncoder().encode(dependency)
         let decoded = try JSONDecoder().decode(Package.Dependency.self, from: encoded)

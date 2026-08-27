@@ -118,8 +118,8 @@
             targets: [Self.Target]
         ) -> [Package.Dependency] {
 
-            var ordered: [Swift.String: [Package_Primitives.Product.Name]] = [:]
-            var seen: [Swift.String: Swift.Set<Package_Primitives.Product.Name>] = [:]
+            var ordered: [Swift.String: [Package.Product.Name]] = [:]
+            var seen: [Swift.String: Swift.Set<Package.Product.Name>] = [:]
             for target in targets {
                 for edge in target.dependencies {
                     guard case .product(let productName, let packageName) = edge else {

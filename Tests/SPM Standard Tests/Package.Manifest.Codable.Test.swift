@@ -16,8 +16,8 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
                 {
                   "fileSystem": [
                     {
-                      "identity": "swift-graph-primitives",
-                      "path": "/Users/coen/Developer/swift-primitives/swift-graph-primitives",
+                      "identity": "swift-graph",
+                      "path": "/fixture/swift-molecules/swift-graph",
                       "productFilter": null,
                       "traits": [{"name": "default"}]
                     }
@@ -26,7 +26,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
               ],
               "name": "swift-package-graph",
               "packageKind": {
-                "root": ["/Users/coen/Developer/swift-foundations/swift-package-graph"]
+                "root": ["/fixture/swift-compositions/swift-package-graph"]
               },
               "pkgConfig": null,
               "platforms": [
@@ -46,12 +46,12 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
         #expect(manifest.dependencies.count == 1)
 
         let dep = manifest.dependencies[0]
-        #expect(dep.name == "swift-graph-primitives")
+        #expect(dep.name == "swift-graph")
         guard case .path(let path) = dep.source else {
             Issue.record("expected .path source")
             return
         }
-        #expect(path == "/Users/coen/Developer/swift-primitives/swift-graph-primitives")
+        #expect(path == "/fixture/swift-molecules/swift-graph")
     }
 
     @Test

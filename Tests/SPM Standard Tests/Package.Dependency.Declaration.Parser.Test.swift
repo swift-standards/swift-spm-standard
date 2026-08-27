@@ -19,7 +19,7 @@ extension `SPM Standard Tests`.`Declaration Parser` {
                      .package(url: "https://github.com/commented/block.git", branch: "main")
                      /* .package(url: "https://github.com/commented/nested.git", branch: "main") */
                      */
-                    .package(url: "https://github.com/swift-foundations/swift-json.git", branch: "main"),
+                    .package(url: "https://github.com/swift-compositions/swift-json.git", branch: "main"),
                 ]
             )
             """#
@@ -29,7 +29,7 @@ extension `SPM Standard Tests`.`Declaration Parser` {
         #expect(
             declarations == [
                 .url(
-                    "https://github.com/swift-foundations/swift-json.git",
+                    "https://github.com/swift-compositions/swift-json.git",
                     line: 8
                 )
             ]

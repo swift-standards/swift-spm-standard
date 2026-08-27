@@ -164,25 +164,25 @@ extension `SPM Standard Tests`.Resolution {
     func `an edited dependency decodes and reports no revision`() throws {
 
         let record = """
-            { "packageRef": { "identity": "swift-parser-primitives", "kind": "localSourceControl",
-                              "location": "/fixture/checkouts/swift-parser-primitives",
-                              "name": "swift-parser-primitives" },
-              "state": { "name": "edited", "path": "/fixture/edited/swift-parser-primitives" },
-              "subpath": "swift-parser-primitives",
-              "basedOn": { "packageRef": { "identity": "swift-parser-primitives",
+            { "packageRef": { "identity": "swift-parser", "kind": "localSourceControl",
+                              "location": "/fixture/checkouts/swift-parser",
+                              "name": "swift-parser" },
+              "state": { "name": "edited", "path": "/fixture/edited/swift-parser" },
+              "subpath": "swift-parser",
+              "basedOn": { "packageRef": { "identity": "swift-parser",
                                            "kind": "localSourceControl",
-                                           "location": "/fixture/checkouts/swift-parser-primitives",
-                                           "name": "swift-parser-primitives" },
+                                           "location": "/fixture/checkouts/swift-parser",
+                                           "name": "swift-parser" },
                            "state": { "name": "sourceControlCheckout",
                                       "checkoutState": { "revision": "aaa111", "branch": "main" } },
-                           "subpath": "swift-parser-primitives", "basedOn": null } }
+                           "subpath": "swift-parser", "basedOn": null } }
             """
         let dependency = try #require(try decode(envelope(record)).dependencies.first)
         guard case .edited(let path, let superseded) = dependency.state else {
             Issue.record("Expected .edited, got \(dependency.state)")
             return
         }
-        #expect(path == "/fixture/edited/swift-parser-primitives")
+        #expect(path == "/fixture/edited/swift-parser")
 
         #expect(dependency.revision == nil)
 

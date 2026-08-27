@@ -17,20 +17,20 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/swift-primitives/swift-byte-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-package-primitives.git", branch: "main"),
-        .package(url: "https://github.com/swift-primitives/swift-version-primitives.git", branch: "main"),
+        .package(url: "https://github.com/swift-molecules/swift-byte.git", branch: "main"),
+        .package(url: "https://github.com/swift-molecules/swift-package.git", branch: "main"),
+        .package(url: "https://github.com/swift-molecules/swift-version.git", branch: "main"),
         .package(url: "https://github.com/swift-standards/swift-uri-standard.git", branch: "main")
     ],
     targets: [
         .target(
             name: "SPM Standard",
             dependencies: [
-                .product(name: "Byte Primitives", package: "swift-byte-primitives"),
-                .product(name: "Byte Primitives Standard Library Integration", package: "swift-byte-primitives"),
-                .product(name: "Package Primitives", package: "swift-package-primitives"),
-                .product(name: "Version Primitives", package: "swift-version-primitives"),
-                .product(name: "Version Primitives Standard Library Integration", package: "swift-version-primitives"),
+                .product(name: "Byte", package: "swift-byte"),
+                .product(name: "Byte Standard Library Integration", package: "swift-byte"),
+                .product(name: "Package", package: "swift-package"),
+                .product(name: "Version", package: "swift-version"),
+                .product(name: "Version Standard Library Integration", package: "swift-version"),
                 .product(name: "URI Standard", package: "swift-uri-standard"),
                 .product(name: "URI Standard Library Integration", package: "swift-uri-standard")
             ]
