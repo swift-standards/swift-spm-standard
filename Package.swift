@@ -17,9 +17,9 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/swift-molecules/swift-byte.git", branch: "main"),
-        .package(url: "https://github.com/swift-molecules/swift-package.git", branch: "main"),
-        .package(url: "https://github.com/swift-molecules/swift-version.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-byte.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-package.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-version.git", branch: "main", traits: ["Parser"]),
         .package(url: "https://github.com/swift-standards/swift-uri-standard.git", branch: "main")
     ],
     targets: [
@@ -27,10 +27,9 @@ let package = Package(
             name: "SPM Standard",
             dependencies: [
                 .product(name: "Byte", package: "swift-byte"),
-                .product(name: "Byte Standard Library Integration", package: "swift-byte"),
                 .product(name: "Package", package: "swift-package"),
                 .product(name: "Version", package: "swift-version"),
-                .product(name: "Version Standard Library Integration", package: "swift-version"),
+                .product(name: "Version", package: "swift-version"),
                 .product(name: "URI Standard", package: "swift-uri-standard"),
                 .product(name: "URI Standard Library Integration", package: "swift-uri-standard")
             ]
