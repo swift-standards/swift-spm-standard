@@ -18,10 +18,14 @@
                 self.init(revision: revision, pin: .branch(branch))
 
             case (.none, .some(let version)):
-                let semantic: Version.Semantic
-                do throws(Version.Semantic.Error) {
-                    semantic = try Version.Semantic(parsing: version)
+                var input = [Byte](utf8: version)[...]
+                let parsed: Version.Semantic?
+                do throws(Version.Semantic.ParserError) {
+                    parsed = try Version.Semantic.parser.parse(&input)
                 } catch {
+                    parsed = nil
+                }
+                guard let semantic = parsed, input.isEmpty else {
                     throw DecodingError.dataCorruptedError(
                         forKey: .version,
                         in: container,

@@ -184,9 +184,9 @@ extension `SPM Standard Tests`.Evaluation {
     func `public construction cannot express registry without a requirement`() {
         let source = Package.Dependency.Evaluation.Source.registry(
             identity: Package.Identity(scope: "apple", name: "swift-argument-parser"),
-            requirement: .exact("1.2.3")
+            requirement: .exact(Version.Semantic(major: 1, minor: 2, patch: 3))
         )
-        #expect(source.requirement == .exact("1.2.3"))
+        #expect(source.requirement == .exact(Version.Semantic(major: 1, minor: 2, patch: 3)))
     }
 
     @Test
@@ -194,7 +194,7 @@ extension `SPM Standard Tests`.Evaluation {
         let identity = Package.Identity(scope: "apple", name: "swift-argument-parser")
         let source = Package.Dependency.Evaluation.Source.registry(
             identity: identity,
-            requirement: .exact("1.2.3")
+            requirement: .exact(Version.Semantic(major: 1, minor: 2, patch: 3))
         )
         #expect(source.identity.underlying == "apple.swift-argument-parser")
 
@@ -492,7 +492,7 @@ extension `SPM Standard Tests`.Evaluation {
         )
 
         #expect(evaluation.name == "swift-evaluation-fixture")
-        #expect(evaluation.toolsVersion == Version.Tools("6.3.3"))
+        #expect(evaluation.toolsVersion == Version.Tools(major: 6, minor: 3, patch: 3))
         #expect(evaluation.products.count == 1)
         #expect(evaluation.products[0].name == "Evaluation Fixture")
         #expect(evaluation.targets.count == 2)

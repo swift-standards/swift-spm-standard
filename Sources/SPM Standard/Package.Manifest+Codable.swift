@@ -16,16 +16,22 @@
             let name = Package.Name(_unchecked: nameString)
             let toolsWire = try container.decode(_ToolsVersionWire.self, forKey: .toolsVersion)
             let toolsVersion: Version.Tools
-            do {
-                toolsVersion = try Version.Tools(parsing: toolsWire._version)
+            var toolsInput = [Byte](utf8: toolsWire._version)[...]
+            let parsedTools: Version.Tools?
+            do throws(Version.Tools.ParserError) {
+                parsedTools = try Version.Tools.parser.parse(&toolsInput)
             } catch {
+                parsedTools = nil
+            }
+            guard let parsedTools, toolsInput.isEmpty else {
                 throw DecodingError.dataCorruptedError(
                     forKey: .toolsVersion,
                     in: container,
                     debugDescription:
-                        "Invalid tools-version string '\(toolsWire._version)': \(error)"
+                        "Invalid tools-version string '\(toolsWire._version)'"
                 )
             }
+            toolsVersion = parsedTools
             let wireDependencies = try container.decode(
                 [_DependencyWire].self,
                 forKey: .dependencies
@@ -83,8 +89,10 @@
         internal static func _parseSemantic(
             _ string: Swift.String
         ) throws -> Version.Semantic {
-            do {
-                return try Version.Semantic(parsing: string)
+            var input = [Byte](utf8: string)[...]
+            let semantic: Version.Semantic
+            do throws(Version.Semantic.ParserError) {
+                semantic = try Version.Semantic.parser.parse(&input)
             } catch {
                 throw DecodingError.dataCorrupted(
                     DecodingError.Context(
@@ -93,6 +101,15 @@
                     )
                 )
             }
+            guard input.isEmpty else {
+                throw DecodingError.dataCorrupted(
+                    DecodingError.Context(
+                        codingPath: [],
+                        debugDescription: "Invalid semantic version '\(string)': trailing content"
+                    )
+                )
+            }
+            return semantic
         }
 
         internal static func _parseIdentity(
@@ -118,8 +135,8 @@
             targets: [Self.Target]
         ) -> [Package.Dependency] {
 
-            var ordered: [Swift.String: [Package.Product.Name]] = [:]
-            var seen: [Swift.String: Swift.Set<Package.Product.Name>] = [:]
+            var ordered: [Swift.String: [Package::Product.Name]] = [:]
+            var seen: [Swift.String: Swift.Set<Package::Product.Name>] = [:]
             for target in targets {
                 for edge in target.dependencies {
                     guard case .product(let productName, let packageName) = edge else {

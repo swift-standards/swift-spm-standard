@@ -24,7 +24,7 @@ extension `SPM Standard Tests`.`Declaration Parser` {
             )
             """#
 
-        let declarations = try Package.Dependency.Declaration.Parser().parse([Byte](source.utf8))
+        let declarations = try Package.Dependency.Declaration.Parser().parse([Byte](utf8: source))
 
         #expect(
             declarations == [
@@ -56,7 +56,7 @@ extension `SPM Standard Tests`.`Declaration Parser` {
             )
             """#
 
-        let declarations = try Package.Dependency.Declaration.Parser().parse([Byte](source.utf8))
+        let declarations = try Package.Dependency.Declaration.Parser().parse([Byte](utf8: source))
 
         #expect(
             declarations == [
@@ -71,12 +71,12 @@ extension `SPM Standard Tests`.`Declaration Parser` {
     {
         let source = #"""
             .package(path: ".."),
-            .package(id: "example.library", from: "1.0.0"),
+            .package(id: "example.library", from: Version.Semantic(major: 1, minor: 0, patch: 0)),
             .package(url: endpoint, branch: "main"),
             .package(url: "https://github.com/vendor/no-suffix", branch: "main"),
             """#
 
-        let declarations = try Package.Dependency.Declaration.Parser().parse([Byte](source.utf8))
+        let declarations = try Package.Dependency.Declaration.Parser().parse([Byte](utf8: source))
 
         #expect(declarations[0] == .path("..", line: 1))
         #expect(declarations[1] == .registry("example.library", line: 2))

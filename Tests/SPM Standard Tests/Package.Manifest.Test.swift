@@ -7,7 +7,7 @@ extension `SPM Standard Tests`.Unit {
     func `Package.Manifest stores name, toolsVersion, dependencies`() throws {
         let manifest = Package.Manifest(
             name: "swift-foo",
-            toolsVersion: try Version.Tools("6.3"),
+            toolsVersion: Version.Tools(major: 6, minor: 3),
             dependencies: [
                 Package.Dependency(
                     source: .path("../swift-bar"),
@@ -17,7 +17,7 @@ extension `SPM Standard Tests`.Unit {
             ]
         )
         #expect(manifest.name == "swift-foo")
-        #expect(manifest.toolsVersion == (try Version.Tools("6.3")))
+        #expect(manifest.toolsVersion == (Version.Tools(major: 6, minor: 3)))
         #expect(manifest.dependencies.count == 1)
         #expect(manifest.dependencies[0].name == "swift-bar")
     }
@@ -26,14 +26,14 @@ extension `SPM Standard Tests`.Unit {
     func `Package.Manifest accepts empty dependencies by default`() throws {
         let manifest = Package.Manifest(
             name: "swift-leaf",
-            toolsVersion: try Version.Tools("6.3")
+            toolsVersion: Version.Tools(major: 6, minor: 3)
         )
         #expect(manifest.dependencies.isEmpty)
     }
 
     @Test
     func `Package.Manifest equality reflects all fields`() throws {
-        let toolsVersion = try Version.Tools("6.3")
+        let toolsVersion = Version.Tools(major: 6, minor: 3)
         let a = Package.Manifest(name: "swift-foo", toolsVersion: toolsVersion)
         let b = Package.Manifest(name: "swift-foo", toolsVersion: toolsVersion)
         let c = Package.Manifest(name: "swift-bar", toolsVersion: toolsVersion)

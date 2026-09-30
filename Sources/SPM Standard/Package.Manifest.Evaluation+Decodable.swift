@@ -20,16 +20,22 @@
                 forKey: .toolsVersion
             )
             let toolsVersion: Version.Tools
-            do throws(Version.Tools.Error) {
-                toolsVersion = try Version.Tools(parsing: toolsWire._version)
+            var toolsInput = [Byte](utf8: toolsWire._version)[...]
+            let parsedTools: Version.Tools?
+            do throws(Version.Tools.ParserError) {
+                parsedTools = try Version.Tools.parser.parse(&toolsInput)
             } catch {
+                parsedTools = nil
+            }
+            guard let parsedTools, toolsInput.isEmpty else {
                 throw DecodingError.dataCorruptedError(
                     forKey: .toolsVersion,
                     in: container,
                     debugDescription:
-                        "Invalid tools-version string '\(toolsWire._version)': \(error)"
+                        "Invalid tools-version string '\(toolsWire._version)'"
                 )
             }
+            toolsVersion = parsedTools
 
             let wireDependencies = try container.decode(
                 [Package.Manifest.Evaluation._DependencyWire].self,
@@ -139,8 +145,8 @@
             dependencies: [Package.Dependency.Evaluation],
             targets: [Package.Manifest.Target]
         ) -> [Package.Dependency.Evaluation] {
-            var ordered: [Swift.String: [Package.Product.Name]] = [:]
-            var seen: [Swift.String: Swift.Set<Package.Product.Name>] = [:]
+            var ordered: [Swift.String: [Package::Product.Name]] = [:]
+            var seen: [Swift.String: Swift.Set<Package::Product.Name>] = [:]
             for target in targets {
                 for edge in target.dependencies {
                     guard case .product(let productName, let packageName) = edge else {

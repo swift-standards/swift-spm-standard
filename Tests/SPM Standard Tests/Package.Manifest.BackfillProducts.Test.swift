@@ -209,7 +209,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
     func `Package.Manifest with products and targets round-trips through JSON`() throws {
         let manifest = Package.Manifest(
             name: "swift-foo",
-            toolsVersion: try Version.Tools("6.3.1"),
+            toolsVersion: Version.Tools(major: 6, minor: 3, patch: 1),
             dependencies: [
                 Package.Dependency(
                     source: .path("/abs/swift-bar"),

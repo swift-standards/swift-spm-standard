@@ -16,21 +16,21 @@
             let kind = try container.decode(Kind.self, forKey: .kind)
             switch kind {
             case .from:
-                let version = try container.decode(Version.Semantic.self, forKey: .version)
+                let version = try Package.Manifest._parseSemantic(container.decode(Swift.String.self, forKey: .version))
                 self = .from(version)
 
             case .upToNextMajor:
-                let version = try container.decode(Version.Semantic.self, forKey: .version)
+                let version = try Package.Manifest._parseSemantic(container.decode(Swift.String.self, forKey: .version))
                 self = .upToNextMajor(from: version)
 
             case .upToNextMinor:
-                let version = try container.decode(Version.Semantic.self, forKey: .version)
+                let version = try Package.Manifest._parseSemantic(container.decode(Swift.String.self, forKey: .version))
                 self = .upToNextMinor(from: version)
 
             case .range:
-                let lower = try container.decode(Version.Semantic.self, forKey: .lower)
+                let lower = try Package.Manifest._parseSemantic(container.decode(Swift.String.self, forKey: .lower))
                 let lowerInclusive = try container.decode(Swift.Bool.self, forKey: .lowerInclusive)
-                let upper = try container.decode(Version.Semantic.self, forKey: .upper)
+                let upper = try Package.Manifest._parseSemantic(container.decode(Swift.String.self, forKey: .upper))
                 let upperInclusive = try container.decode(Swift.Bool.self, forKey: .upperInclusive)
                 let lowerBound: Version.Range<Version.Semantic>.Bound =
                     lowerInclusive
@@ -41,7 +41,7 @@
                 self = .range(Version.Range(lowerBound: lowerBound, upperBound: upperBound))
 
             case .exact:
-                let version = try container.decode(Version.Semantic.self, forKey: .version)
+                let version = try Package.Manifest._parseSemantic(container.decode(Swift.String.self, forKey: .version))
                 self = .exact(version)
 
             case .branch:
@@ -59,15 +59,15 @@
             switch self {
             case .from(let version):
                 try container.encode(Kind.from, forKey: .kind)
-                try container.encode(version, forKey: .version)
+                try container.encode(version.description, forKey: .version)
 
             case .upToNextMajor(from: let version):
                 try container.encode(Kind.upToNextMajor, forKey: .kind)
-                try container.encode(version, forKey: .version)
+                try container.encode(version.description, forKey: .version)
 
             case .upToNextMinor(from: let version):
                 try container.encode(Kind.upToNextMinor, forKey: .kind)
-                try container.encode(version, forKey: .version)
+                try container.encode(version.description, forKey: .version)
 
             case .range(let range):
                 try container.encode(Kind.range, forKey: .kind)
@@ -86,7 +86,7 @@
 
             case .exact(let version):
                 try container.encode(Kind.exact, forKey: .kind)
-                try container.encode(version, forKey: .version)
+                try container.encode(version.description, forKey: .version)
 
             case .branch(let branch):
                 try container.encode(Kind.branch, forKey: .kind)
@@ -106,11 +106,11 @@
         ) throws {
             switch bound {
             case .inclusive(let version):
-                try container.encode(version, forKey: valueKey)
+                try container.encode(version.description, forKey: valueKey)
                 try container.encode(true, forKey: flagKey)
 
             case .exclusive(let version):
-                try container.encode(version, forKey: valueKey)
+                try container.encode(version.description, forKey: valueKey)
                 try container.encode(false, forKey: flagKey)
 
             case .unbounded:

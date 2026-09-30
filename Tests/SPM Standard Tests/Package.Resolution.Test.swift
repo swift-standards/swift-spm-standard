@@ -90,7 +90,7 @@ extension `SPM Standard Tests`.Resolution {
             """
         let dependency = try #require(try decode(envelope(record)).dependencies.first)
         #expect(
-            dependency.state.checkout?.pin == .version(try Version.Semantic(parsing: "602.0.0"))
+            dependency.state.checkout?.pin == .version(Version.Semantic(major: 602, minor: 0, patch: 0))
         )
     }
 
@@ -108,7 +108,7 @@ extension `SPM Standard Tests`.Resolution {
         let dependency = try #require(try decode(envelope(record)).dependencies.first)
         #expect(dependency.state.checkout?.pin == .branch("1.6.1"))
 
-        #expect(dependency.state.checkout?.pin != .version(try Version.Semantic(parsing: "1.6.1")))
+        #expect(dependency.state.checkout?.pin != .version(Version.Semantic(major: 1, minor: 6, patch: 1)))
     }
 
     @Test

@@ -42,7 +42,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
         let manifest = try JSONDecoder().decode(Package.Manifest.self, from: data)
 
         #expect(manifest.name == "swift-package-graph")
-        #expect(manifest.toolsVersion == (try Version.Tools("6.3.1")))
+        #expect(manifest.toolsVersion == (Version.Tools(major: 6, minor: 3, patch: 1)))
         #expect(manifest.dependencies.count == 1)
 
         let dep = manifest.dependencies[0]
@@ -91,7 +91,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
             Issue.record("expected .exact requirement, got \(requirement)")
             return
         }
-        #expect(version == (try Version.Semantic(parsing: "602.0.0")))
+        #expect(version == Version.Semantic(major: 602, minor: 0, patch: 0))
     }
 
     @Test
@@ -132,11 +132,11 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
             return
         }
         switch r.lowerBound {
-        case .inclusive(let v): #expect(v == (try Version.Semantic(parsing: "1.8.0")))
+        case .inclusive(let v): #expect(v == Version.Semantic(major: 1, minor: 8, patch: 0))
         default: Issue.record("expected inclusive lower bound")
         }
         switch r.upperBound {
-        case .exclusive(let v): #expect(v == (try Version.Semantic(parsing: "2.0.0")))
+        case .exclusive(let v): #expect(v == Version.Semantic(major: 2, minor: 0, patch: 0))
         default: Issue.record("expected exclusive upper bound")
         }
     }
@@ -208,7 +208,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
             Issue.record("expected .exact requirement")
             return
         }
-        #expect(v == (try Version.Semantic(parsing: "1.5.0")))
+        #expect(v == Version.Semantic(major: 1, minor: 5, patch: 0))
     }
 
     @Test
@@ -270,7 +270,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
     func `Package.Manifest minimal round-trips through JSON`() throws {
         let manifest = Package.Manifest(
             name: "swift-leaf",
-            toolsVersion: try Version.Tools("6.3.1")
+            toolsVersion: Version.Tools(major: 6, minor: 3, patch: 1)
         )
         let encoded = try JSONEncoder().encode(manifest)
         let decoded = try JSONDecoder().decode(Package.Manifest.self, from: encoded)
@@ -281,7 +281,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
     func `Package.Manifest with path-form dep round-trips through JSON`() throws {
         let manifest = Package.Manifest(
             name: "swift-foo",
-            toolsVersion: try Version.Tools("6.3.1"),
+            toolsVersion: Version.Tools(major: 6, minor: 3, patch: 1),
             dependencies: [
                 Package.Dependency(
                     source: .path("/abs/swift-bar"),
@@ -299,12 +299,12 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
     func `Package.Manifest with url-form dep round-trips through JSON`() throws {
         let manifest = Package.Manifest(
             name: "swift-foo",
-            toolsVersion: try Version.Tools("6.3.1"),
+            toolsVersion: Version.Tools(major: 6, minor: 3, patch: 1),
             dependencies: [
                 Package.Dependency(
                     source: .url(
                         "https://github.com/swiftlang/swift-syntax.git",
-                        .exact("602.0.0")
+                        .exact(Version.Semantic(major: 602, minor: 0, patch: 0))
                     ),
                     name: "swift-syntax",
                     products: []
@@ -320,7 +320,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
     func `Package.Manifest with all three dep forms round-trips through JSON`() throws {
         let manifest = Package.Manifest(
             name: "swift-mixed",
-            toolsVersion: try Version.Tools("6.3.1"),
+            toolsVersion: Version.Tools(major: 6, minor: 3, patch: 1),
             dependencies: [
                 Package.Dependency(
                     source: .path("/abs/swift-local"),
@@ -328,7 +328,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
                     products: []
                 ),
                 Package.Dependency(
-                    source: .url("https://example.com/swift-remote.git", .exact("1.0.0")),
+                    source: .url("https://example.com/swift-remote.git", .exact(Version.Semantic(major: 1, minor: 0, patch: 0))),
                     name: "swift-remote",
                     products: []
                 ),
