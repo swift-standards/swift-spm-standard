@@ -92,9 +92,9 @@ extension Package.Dependency.Declaration.Parser {
                 let value = index + 2
                 let end = argumentEnd(in: tokens, from: value)
                 switch label {
-                case "url": url = (tokens[safe: value] ?? tokens[index], end)
-                case "path": path = (tokens[safe: value] ?? tokens[index], end)
-                case "id": registry = (tokens[safe: value] ?? tokens[index], end)
+                case "url": url = (tokens.element(at: value) ?? tokens[index], end)
+                case "path": path = (tokens.element(at: value) ?? tokens[index], end)
+                case "id": registry = (tokens.element(at: value) ?? tokens[index], end)
                 default: break
                 }
 
@@ -164,7 +164,7 @@ extension Package.Dependency.Declaration.Parser.Argument {
 }
 
 extension Array {
-    fileprivate subscript(safe index: Index) -> Element? {
+    fileprivate func element(at index: Index) -> Element? {
         indices.contains(index) ? self[index] : nil
     }
 }
