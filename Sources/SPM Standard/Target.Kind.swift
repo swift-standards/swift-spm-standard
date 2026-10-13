@@ -1,6 +1,6 @@
 extension Target {
 
-    public enum Kind: Swift.String, Swift.Sendable, Swift.Hashable, Swift.CaseIterable {
+    public enum Kind: Swift::String, Swift::Sendable, Swift::Hashable, Swift::CaseIterable {
 
         case regular
 

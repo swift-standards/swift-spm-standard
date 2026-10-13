@@ -1,6 +1,6 @@
 #if !hasFeature(Embedded)
     extension Package.Manifest.Evaluation: Decodable {
-        private enum CodingKeys: Swift.String, CodingKey {
+        private enum CodingKeys: Swift::String, CodingKey {
             case name
             case toolsVersion
             case dependencies
@@ -12,7 +12,7 @@
         public init(from decoder: any Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
 
-            let nameString = try container.decode(Swift.String.self, forKey: .name)
+            let nameString = try container.decode(Swift::String.self, forKey: .name)
             let name = Package.Name(_unchecked: nameString)
 
             let toolsWire = try container.decode(
@@ -79,7 +79,7 @@
 
     extension Package.Manifest.Evaluation {
 
-        internal static func _corrupt(_ message: Swift.String) -> DecodingError {
+        internal static func _corrupt(_ message: Swift::String) -> DecodingError {
             DecodingError.dataCorrupted(
                 DecodingError.Context(codingPath: [], debugDescription: message)
             )
@@ -87,7 +87,7 @@
 
         internal static func _exactlyOne<Element>(
             _ array: [Element]?,
-            _ label: Swift.String
+            _ label: Swift::String
         ) throws(DecodingError) -> Element {
             guard let array else {
                 throw _corrupt("\(label) is absent")
@@ -101,8 +101,8 @@
         }
 
         internal static func _identity(
-            _ token: Swift.String,
-            _ label: Swift.String
+            _ token: Swift::String,
+            _ label: Swift::String
         ) throws(DecodingError) -> Package.Dependency.Evaluation.Identity {
             guard !token.isEmpty else {
                 throw _corrupt("\(label).identity is empty")
@@ -118,7 +118,7 @@
 
         internal static func _requirement(
             _ wire: Package.Manifest._RequirementWire,
-            _ label: Swift.String
+            _ label: Swift::String
         ) throws(DecodingError) -> Package.Requirement {
             do {
                 return try wire.toRequirement()
@@ -130,7 +130,7 @@
         }
 
         internal static func _registry(
-            _ token: Swift.String
+            _ token: Swift::String
         ) throws(DecodingError) -> Package.Identity {
             do {
                 return try Package.Manifest._parseIdentity(token)
@@ -145,8 +145,8 @@
             dependencies: [Package.Dependency.Evaluation],
             targets: [Package.Manifest.Target]
         ) -> [Package.Dependency.Evaluation] {
-            var ordered: [Swift.String: [Package::Product.Name]] = [:]
-            var seen: [Swift.String: Swift.Set<Package::Product.Name>] = [:]
+            var ordered: [Swift::String: [Package::Product.Name]] = [:]
+            var seen: [Swift::String: Swift::Set<Package::Product.Name>] = [:]
             for target in targets {
                 for edge in target.dependencies {
                     guard case .product(let productName, let packageName) = edge else {

@@ -1,6 +1,6 @@
 #if !hasFeature(Embedded)
     extension Package.Dependency.Source: Codable {
-        private enum CodingKeys: Swift.String, CodingKey {
+        private enum CodingKeys: Swift::String, CodingKey {
             case kind
             case path
             case url
@@ -13,10 +13,10 @@
             let kind = try container.decode(Kind.self, forKey: .kind)
             switch kind {
             case .path:
-                self = .path(try container.decode(Swift.String.self, forKey: .path))
+                self = .path(try container.decode(Swift::String.self, forKey: .path))
 
             case .url:
-                let urlString = try container.decode(Swift.String.self, forKey: .url)
+                let urlString = try container.decode(Swift::String.self, forKey: .url)
                 let url: URI
                 do {
                     url = try URI(urlString)

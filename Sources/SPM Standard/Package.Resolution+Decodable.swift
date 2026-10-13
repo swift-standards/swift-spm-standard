@@ -1,7 +1,7 @@
 #if !hasFeature(Embedded)
     extension Package.Resolution: Decodable {
 
-        private enum CodingKeys: Swift.String, CodingKey {
+        private enum CodingKeys: Swift::String, CodingKey {
             case version
             case object
             case dependencies
@@ -9,7 +9,7 @@
 
         public init(from decoder: any Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            let version = try container.decode(Swift.Int.self, forKey: .version)
+            let version = try container.decode(Swift::Int.self, forKey: .version)
 
             guard version == Package.Resolution.supportedVersion else {
                 throw DecodingError.dataCorruptedError(

@@ -67,7 +67,7 @@ extension Package.Dependency.Declaration.Parser {
                 tokens.append(
                     .init(
                         kind: .identifier(
-                            Swift.String(decoding: bytes[start..<index], as: Swift.UTF8.self)
+                            Swift::String(decoding: bytes[start..<index], as: Swift::UTF8.self)
                         ),
                         line: line,
                         offset: tokens.count
@@ -87,13 +87,13 @@ extension Package.Dependency.Declaration.Parser {
 
     private func string(
         in bytes: [UInt8],
-        at start: Swift.Int,
-        line: inout Swift.Int
+        at start: Swift::Int,
+        line: inout Swift::Int
     ) throws(Error) -> (
-        value: Swift.String,
-        interpolated: Swift.Bool,
-        line: Swift.Int,
-        next: Swift.Int
+        value: Swift::String,
+        interpolated: Swift::Bool,
+        line: Swift::Int,
+        next: Swift::Int
     )? {
         var hashes = 0
         var quote = start
@@ -120,7 +120,7 @@ extension Package.Dependency.Declaration.Parser {
                 quotes: multiline ? 3 : 1
             ) {
                 return (
-                    Swift.String(decoding: content, as: Swift.UTF8.self),
+                    Swift::String(decoding: content, as: Swift::UTF8.self),
                     interpolated,
                     openingLine,
                     index + hashes + (multiline ? 3 : 1)
@@ -173,10 +173,10 @@ extension Package.Dependency.Declaration.Parser {
 
     private func closesString(
         _ bytes: [UInt8],
-        at index: Swift.Int,
-        hashes: Swift.Int,
-        quotes: Swift.Int
-    ) -> Swift.Bool {
+        at index: Swift::Int,
+        hashes: Swift::Int,
+        quotes: Swift::Int
+    ) -> Swift::Bool {
         guard index + quotes + hashes <= bytes.count else { return false }
         for offset in 0..<quotes where bytes[index + offset] != 0x22 {
             return false
@@ -187,11 +187,11 @@ extension Package.Dependency.Declaration.Parser {
         return true
     }
 
-    private static func identifierHead(_ byte: UInt8) -> Swift.Bool {
+    private static func identifierHead(_ byte: UInt8) -> Swift::Bool {
         byte == 0x5F || (0x41...0x5A).contains(byte) || (0x61...0x7A).contains(byte)
     }
 
-    private static func identifierBody(_ byte: UInt8) -> Swift.Bool {
+    private static func identifierBody(_ byte: UInt8) -> Swift::Bool {
         identifierHead(byte) || (0x30...0x39).contains(byte)
     }
 

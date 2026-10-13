@@ -1,6 +1,6 @@
 extension Package {
 
-    public enum Requirement: Swift.Sendable, Swift.Hashable {
+    public enum Requirement: Swift::Sendable, Swift::Hashable {
 
         case from(Version.Semantic)
 
@@ -12,8 +12,8 @@ extension Package {
 
         case exact(Version.Semantic)
 
-        case branch(Swift.String)
+        case branch(Swift::String)
 
-        case revision(Swift.String)
+        case revision(Swift::String)
     }
 }

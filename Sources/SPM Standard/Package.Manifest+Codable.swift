@@ -1,6 +1,6 @@
 #if !hasFeature(Embedded)
     extension Package.Manifest: Codable {
-        private enum CodingKeys: Swift.String, CodingKey {
+        private enum CodingKeys: Swift::String, CodingKey {
             case name
             case toolsVersion
             case dependencies
@@ -12,7 +12,7 @@
         public init(from decoder: any Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
 
-            let nameString = try container.decode(Swift.String.self, forKey: .name)
+            let nameString = try container.decode(Swift::String.self, forKey: .name)
             let name = Package.Name(_unchecked: nameString)
             let toolsWire = try container.decode(_ToolsVersionWire.self, forKey: .toolsVersion)
             let toolsVersion: Version.Tools
@@ -87,7 +87,7 @@
     extension Package.Manifest {
 
         internal static func _parseSemantic(
-            _ string: Swift.String
+            _ string: Swift::String
         ) throws -> Version.Semantic {
             var input = [Byte](utf8: string)[...]
             let semantic: Version.Semantic
@@ -113,7 +113,7 @@
         }
 
         internal static func _parseIdentity(
-            _ string: Swift.String
+            _ string: Swift::String
         ) throws -> Package.Identity {
 
             guard let dot = string.firstIndex(of: ".") else {
@@ -125,8 +125,8 @@
                     )
                 )
             }
-            let scope = Swift.String(string[..<dot])
-            let name = Swift.String(string[string.index(after: dot)...])
+            let scope = Swift::String(string[..<dot])
+            let name = Swift::String(string[string.index(after: dot)...])
             return Package.Identity(scope: scope, name: name)
         }
 
@@ -135,8 +135,8 @@
             targets: [Self.Target]
         ) -> [Package.Dependency] {
 
-            var ordered: [Swift.String: [Package::Product.Name]] = [:]
-            var seen: [Swift.String: Swift.Set<Package::Product.Name>] = [:]
+            var ordered: [Swift::String: [Package::Product.Name]] = [:]
+            var seen: [Swift::String: Swift::Set<Package::Product.Name>] = [:]
             for target in targets {
                 for edge in target.dependencies {
                     guard case .product(let productName, let packageName) = edge else {

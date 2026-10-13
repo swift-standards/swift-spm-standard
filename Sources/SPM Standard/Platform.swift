@@ -1,4 +1,4 @@
-public enum Platform: Swift.String, Swift.Sendable, Swift.Hashable, Swift.CaseIterable {
+public enum Platform: Swift::String, Swift::Sendable, Swift::Hashable, Swift::CaseIterable {
     case macOS = "macos"
     case iOS = "ios"
     case tvOS = "tvos"

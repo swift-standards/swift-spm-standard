@@ -1,6 +1,6 @@
 #if !hasFeature(Embedded)
     extension Package.Dependency: Codable {
-        private enum CodingKeys: Swift.String, CodingKey {
+        private enum CodingKeys: Swift::String, CodingKey {
             case source
             case name
             case products

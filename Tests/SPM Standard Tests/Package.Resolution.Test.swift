@@ -9,19 +9,19 @@ extension `SPM Standard Tests` {
 
 extension `SPM Standard Tests`.Resolution {
 
-    private func decode(_ json: Swift.String) throws -> Package.Resolution {
+    private func decode(_ json: Swift::String) throws -> Package.Resolution {
         let data = try #require(json.data(using: .utf8))
         return try JSONDecoder().decode(Package.Resolution.self, from: data)
     }
 
-    private func envelope(_ records: Swift.String, version: Swift.Int = 7) -> Swift.String {
+    private func envelope(_ records: Swift::String, version: Swift::Int = 7) -> Swift::String {
         """
         { "version": \(version),
           "object": { "artifacts": [], "prebuilts": [], "dependencies": [\(records)] } }
         """
     }
 
-    private var checkoutRecord: Swift.String {
+    private var checkoutRecord: Swift::String {
         """
         { "packageRef": { "identity": "swift-paths", "kind": "localSourceControl",
                           "location": "/fixture/checkouts/swift-paths", "name": "swift-paths" },

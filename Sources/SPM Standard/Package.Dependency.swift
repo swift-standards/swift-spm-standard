@@ -1,10 +1,10 @@
 extension Package {
 
-    public struct Dependency: Swift.Sendable, Swift.Hashable {
+    public struct Dependency: Swift::Sendable, Swift::Hashable {
 
-        public enum Source: Swift.Sendable, Swift.Hashable {
+        public enum Source: Swift::Sendable, Swift::Hashable {
 
-            case path(Swift.String)
+            case path(Swift::String)
 
             case url(URI, Package.Requirement)
 

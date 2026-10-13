@@ -19,7 +19,7 @@ extension Package.Dependency.Source {
     @inlinable
     public static func url(
         _ url: URI,
-        branch: Swift.String
+        branch: Swift::String
     ) -> Self {
         .url(url, .branch(branch))
     }
@@ -27,7 +27,7 @@ extension Package.Dependency.Source {
     @inlinable
     public static func url(
         _ url: URI,
-        revision: Swift.String
+        revision: Swift::String
     ) -> Self {
         .url(url, .revision(revision))
     }

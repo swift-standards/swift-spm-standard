@@ -11,7 +11,7 @@ extension Package.Dependency.Declaration.Parser {
     public func parse(_ bytes: [Byte]) throws(Error) -> [Package.Dependency.Declaration] {
 
         let source = bytes.map(\.underlying)
-        guard Swift.String(validating: source, as: Swift.UTF8.self) != nil else {
+        guard Swift::String(validating: source, as: Swift::UTF8.self) != nil else {
             throw .invalidUTF8
         }
         let tokens = try tokenize(source)
@@ -37,14 +37,14 @@ extension Package.Dependency.Declaration.Parser {
 
     private func declaration(
         in tokens: [Token],
-        openingAt opening: Swift.Int
-    ) -> (declaration: Package.Dependency.Declaration, next: Swift.Int) {
+        openingAt opening: Swift::Int
+    ) -> (declaration: Package.Dependency.Declaration, next: Swift::Int) {
         let line = tokens[opening].line
         var depth = 1
         var index = opening + 1
-        var url: (Token, Swift.Int)?
-        var path: (Token, Swift.Int)?
-        var registry: (Token, Swift.Int)?
+        var url: (Token, Swift::Int)?
+        var path: (Token, Swift::Int)?
+        var registry: (Token, Swift::Int)?
 
         while index < tokens.count {
             switch tokens[index].kind {
@@ -112,9 +112,9 @@ extension Package.Dependency.Declaration.Parser {
 
     private func argument(
         _ token: Token,
-        end: Swift.Int,
+        end: Swift::Int,
         kind: Argument,
-        line: Swift.Int
+        line: Swift::Int
     ) -> Package.Dependency.Declaration {
         guard case .string(let value, let interpolated) = token.kind, !interpolated else {
             return .malformed("package \(kind.label) is not a static string literal", line: line)
@@ -129,7 +129,7 @@ extension Package.Dependency.Declaration.Parser {
         }
     }
 
-    private func argumentEnd(in tokens: [Token], from start: Swift.Int) -> Swift.Int {
+    private func argumentEnd(in tokens: [Token], from start: Swift::Int) -> Swift::Int {
         var depth = 1
         var index = start
         while index < tokens.count {
@@ -154,7 +154,7 @@ extension Package.Dependency.Declaration.Parser {
 }
 
 extension Package.Dependency.Declaration.Parser.Argument {
-    fileprivate var label: Swift.String {
+    fileprivate var label: Swift::String {
         switch self {
         case .url: "url"
         case .path: "path"

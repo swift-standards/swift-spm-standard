@@ -1,7 +1,7 @@
 #if !hasFeature(Embedded)
     extension Package.Resolution.Dependency: Decodable {
 
-        private enum CodingKeys: Swift.String, CodingKey {
+        private enum CodingKeys: Swift::String, CodingKey {
             case packageRef
             case state
             case subpath
@@ -15,7 +15,7 @@
             let container = try decoder.container(keyedBy: CodingKeys.self)
 
             let state = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .state)
-            let name = try state.decode(Swift.String.self, forKey: .name)
+            let name = try state.decode(Swift::String.self, forKey: .name)
 
             let superseded = try container.decodeIfPresent(
                 Package.Resolution.Dependency.Superseded.self,
@@ -30,11 +30,11 @@
                 )
 
             case "fileSystem":
-                resolved = .fileSystem(path: try state.decode(Swift.String.self, forKey: .path))
+                resolved = .fileSystem(path: try state.decode(Swift::String.self, forKey: .path))
 
             case "edited":
                 resolved = .edited(
-                    path: try state.decode(Swift.String.self, forKey: .path),
+                    path: try state.decode(Swift::String.self, forKey: .path),
                     basedOn: superseded
                 )
 
@@ -69,7 +69,7 @@
                     forKey: .packageRef
                 ),
                 state: resolved,
-                subpath: try container.decode(Swift.String.self, forKey: .subpath)
+                subpath: try container.decode(Swift::String.self, forKey: .subpath)
             )
         }
     }

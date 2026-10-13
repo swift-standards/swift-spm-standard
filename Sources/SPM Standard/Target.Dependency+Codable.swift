@@ -1,6 +1,6 @@
 #if !hasFeature(Embedded)
     extension Target.Dependency: Codable {
-        private enum CodingKeys: Swift.String, CodingKey {
+        private enum CodingKeys: Swift::String, CodingKey {
             case product
             case target
             case byName
@@ -10,8 +10,8 @@
             let container = try decoder.container(keyedBy: CodingKeys.self)
             if container.contains(.product) {
                 var arm = try container.nestedUnkeyedContainer(forKey: .product)
-                let productName = try arm.decode(Swift.String.self)
-                let packageName = try arm.decode(Swift.String.self)
+                let productName = try arm.decode(Swift::String.self)
+                let packageName = try arm.decode(Swift::String.self)
 
                 self = .product(
                     name: Product.Name(_unchecked: productName),
@@ -21,13 +21,13 @@
             }
             if container.contains(.target) {
                 var arm = try container.nestedUnkeyedContainer(forKey: .target)
-                let name = try arm.decode(Swift.String.self)
+                let name = try arm.decode(Swift::String.self)
                 self = .target(name: Target.Name(_unchecked: name))
                 return
             }
             if container.contains(.byName) {
                 var arm = try container.nestedUnkeyedContainer(forKey: .byName)
-                let name = try arm.decode(Swift.String.self)
+                let name = try arm.decode(Swift::String.self)
                 self = .byName(name)
                 return
             }

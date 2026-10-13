@@ -1,6 +1,6 @@
 extension Package.Manifest {
 
-    public struct Product: Swift.Sendable, Swift.Hashable {
+    public struct Product: Swift::Sendable, Swift::Hashable {
 
         public let name: Package::Product.Name
 

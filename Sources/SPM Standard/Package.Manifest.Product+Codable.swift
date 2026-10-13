@@ -1,6 +1,6 @@
 #if !hasFeature(Embedded)
     extension Package.Manifest.Product: Codable {
-        private enum CodingKeys: Swift.String, CodingKey {
+        private enum CodingKeys: Swift::String, CodingKey {
             case name
             case type
             case targets
@@ -8,9 +8,9 @@
 
         public init(from decoder: any Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            let nameString = try container.decode(Swift.String.self, forKey: .name)
+            let nameString = try container.decode(Swift::String.self, forKey: .name)
             let kind = try container.decode(Package::Product.Kind.self, forKey: .type)
-            let targetNames = try container.decode([Swift.String].self, forKey: .targets)
+            let targetNames = try container.decode([Swift::String].self, forKey: .targets)
             self.init(
                 name: Package::Product.Name(_unchecked: nameString),
                 kind: kind,

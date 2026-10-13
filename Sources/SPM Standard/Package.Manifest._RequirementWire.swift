@@ -1,16 +1,16 @@
 extension Package.Manifest {
 
     internal struct _RequirementWire: Codable {
-        let exact: [Swift.String]?
+        let exact: [Swift::String]?
         let range: [_RangeBounds]?
-        let branch: [Swift.String]?
-        let revision: [Swift.String]?
+        let branch: [Swift::String]?
+        let revision: [Swift::String]?
 
         init(
-            exact: [Swift.String]? = nil,
+            exact: [Swift::String]? = nil,
             range: [_RangeBounds]? = nil,
-            branch: [Swift.String]? = nil,
-            revision: [Swift.String]? = nil
+            branch: [Swift::String]? = nil,
+            revision: [Swift::String]? = nil
         ) {
             self.exact = exact
             self.range = range
@@ -24,8 +24,8 @@ extension Package.Manifest {
                 self.init(exact: [version.description])
 
             case .range(let r):
-                let lower: Swift.String
-                let upper: Swift.String
+                let lower: Swift::String
+                let upper: Swift::String
                 switch r.lowerBound {
                 case .inclusive(let v), .exclusive(let v): lower = v.description
                 case .unbounded: lower = ""

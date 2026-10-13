@@ -1,6 +1,6 @@
 extension Package.Dependency {
 
-    public struct Evaluation: Swift.Sendable, Swift.Hashable {
+    public struct Evaluation: Swift::Sendable, Swift::Hashable {
 
         public let source: Source
 

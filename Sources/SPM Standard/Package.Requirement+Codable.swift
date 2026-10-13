@@ -1,6 +1,6 @@
 #if !hasFeature(Embedded)
     extension Package.Requirement: Codable {
-        private enum CodingKeys: Swift.String, CodingKey {
+        private enum CodingKeys: Swift::String, CodingKey {
             case kind
             case version
             case lower
@@ -16,22 +16,22 @@
             let kind = try container.decode(Kind.self, forKey: .kind)
             switch kind {
             case .from:
-                let version = try Package.Manifest._parseSemantic(container.decode(Swift.String.self, forKey: .version))
+                let version = try Package.Manifest._parseSemantic(container.decode(Swift::String.self, forKey: .version))
                 self = .from(version)
 
             case .upToNextMajor:
-                let version = try Package.Manifest._parseSemantic(container.decode(Swift.String.self, forKey: .version))
+                let version = try Package.Manifest._parseSemantic(container.decode(Swift::String.self, forKey: .version))
                 self = .upToNextMajor(from: version)
 
             case .upToNextMinor:
-                let version = try Package.Manifest._parseSemantic(container.decode(Swift.String.self, forKey: .version))
+                let version = try Package.Manifest._parseSemantic(container.decode(Swift::String.self, forKey: .version))
                 self = .upToNextMinor(from: version)
 
             case .range:
-                let lower = try Package.Manifest._parseSemantic(container.decode(Swift.String.self, forKey: .lower))
-                let lowerInclusive = try container.decode(Swift.Bool.self, forKey: .lowerInclusive)
-                let upper = try Package.Manifest._parseSemantic(container.decode(Swift.String.self, forKey: .upper))
-                let upperInclusive = try container.decode(Swift.Bool.self, forKey: .upperInclusive)
+                let lower = try Package.Manifest._parseSemantic(container.decode(Swift::String.self, forKey: .lower))
+                let lowerInclusive = try container.decode(Swift::Bool.self, forKey: .lowerInclusive)
+                let upper = try Package.Manifest._parseSemantic(container.decode(Swift::String.self, forKey: .upper))
+                let upperInclusive = try container.decode(Swift::Bool.self, forKey: .upperInclusive)
                 let lowerBound: Version.Range<Version.Semantic>.Bound =
                     lowerInclusive
                     ? .inclusive(lower) : .exclusive(lower)
@@ -41,15 +41,15 @@
                 self = .range(Version.Range(lowerBound: lowerBound, upperBound: upperBound))
 
             case .exact:
-                let version = try Package.Manifest._parseSemantic(container.decode(Swift.String.self, forKey: .version))
+                let version = try Package.Manifest._parseSemantic(container.decode(Swift::String.self, forKey: .version))
                 self = .exact(version)
 
             case .branch:
-                let branch = try container.decode(Swift.String.self, forKey: .branch)
+                let branch = try container.decode(Swift::String.self, forKey: .branch)
                 self = .branch(branch)
 
             case .revision:
-                let revision = try container.decode(Swift.String.self, forKey: .revision)
+                let revision = try container.decode(Swift::String.self, forKey: .revision)
                 self = .revision(revision)
             }
         }

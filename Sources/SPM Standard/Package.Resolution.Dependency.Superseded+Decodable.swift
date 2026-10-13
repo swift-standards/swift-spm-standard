@@ -1,7 +1,7 @@
 #if !hasFeature(Embedded)
     extension Package.Resolution.Dependency.Superseded: Decodable {
 
-        private enum CodingKeys: Swift.String, CodingKey {
+        private enum CodingKeys: Swift::String, CodingKey {
             case packageRef
             case state
             case subpath
@@ -12,7 +12,7 @@
         public init(from decoder: any Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             let state = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .state)
-            let name = try state.decode(Swift.String.self, forKey: .name)
+            let name = try state.decode(Swift::String.self, forKey: .name)
 
             guard name == "sourceControlCheckout" else {
                 throw DecodingError.dataCorruptedError(
@@ -36,7 +36,7 @@
                     Package.Resolution.Checkout.self,
                     forKey: .checkoutState
                 ),
-                subpath: try container.decode(Swift.String.self, forKey: .subpath)
+                subpath: try container.decode(Swift::String.self, forKey: .subpath)
             )
         }
     }

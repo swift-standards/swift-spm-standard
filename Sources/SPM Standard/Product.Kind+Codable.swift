@@ -1,6 +1,6 @@
 #if !hasFeature(Embedded)
     extension Product.Kind: Codable {
-        private enum CodingKeys: Swift.String, CodingKey {
+        private enum CodingKeys: Swift::String, CodingKey {
             case library
             case executable
             case plugin
@@ -9,7 +9,7 @@
         public init(from decoder: any Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             if container.contains(.library) {
-                let raws = try container.decode([Swift.String].self, forKey: .library)
+                let raws = try container.decode([Swift::String].self, forKey: .library)
                 guard let first = raws.first else {
                     throw DecodingError.dataCorruptedError(
                         forKey: .library,

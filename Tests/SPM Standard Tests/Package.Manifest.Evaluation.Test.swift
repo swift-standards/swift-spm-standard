@@ -9,12 +9,12 @@ extension `SPM Standard Tests` {
 
 extension `SPM Standard Tests`.Evaluation {
 
-    private func decodeDependency(_ json: Swift.String) throws -> Package.Dependency.Evaluation {
+    private func decodeDependency(_ json: Swift::String) throws -> Package.Dependency.Evaluation {
         let data = try #require(json.data(using: .utf8))
         return try JSONDecoder().decode(Package.Dependency.Evaluation.self, from: data)
     }
 
-    private func decodeManifest(_ json: Swift.String) throws -> Package.Manifest.Evaluation {
+    private func decodeManifest(_ json: Swift::String) throws -> Package.Manifest.Evaluation {
         let data = try #require(json.data(using: .utf8))
         return try JSONDecoder().decode(Package.Manifest.Evaluation.self, from: data)
     }
@@ -275,18 +275,18 @@ extension `SPM Standard Tests`.Evaluation {
         ]
     )
     func `invalid source-control location is rejected`(
-        label: Swift.String,
-        body: Swift.String
+        label: Swift::String,
+        body: Swift::String
     ) throws {
         let json = Self.sourceControlEnvelope(body)
         let data = try #require(json.data(using: .utf8))
-        #expect(throws: (any Swift.Error).self, "\(label) must be rejected") {
+        #expect(throws: (any Swift::Error).self, "\(label) must be rejected") {
             _ = try JSONDecoder().decode(Package.Dependency.Evaluation.self, from: data)
         }
     }
 
-    private static func sourceControlEnvelope(_ body: Swift.String) -> Swift.String {
-        #"{"sourceControl": [{"identity": "swift-broken", "# + Swift.String(body.dropFirst()) + "]}"
+    private static func sourceControlEnvelope(_ body: Swift::String) -> Swift::String {
+        #"{"sourceControl": [{"identity": "swift-broken", "# + Swift::String(body.dropFirst()) + "]}"
     }
 
     @Test
@@ -337,11 +337,11 @@ extension `SPM Standard Tests`.Evaluation {
         ]
     )
     func `a discriminator array must hold exactly one record`(
-        label: Swift.String,
-        json: Swift.String
+        label: Swift::String,
+        json: Swift::String
     ) throws {
         let data = try #require(json.data(using: .utf8))
-        #expect(throws: (any Swift.Error).self, "\(label) must be rejected") {
+        #expect(throws: (any Swift::Error).self, "\(label) must be rejected") {
             _ = try JSONDecoder().decode(Package.Dependency.Evaluation.self, from: data)
         }
     }
@@ -360,7 +360,7 @@ extension `SPM Standard Tests`.Evaluation {
             }
             """
         let data = try #require(json.data(using: .utf8))
-        #expect(throws: (any Swift.Error).self) {
+        #expect(throws: (any Swift::Error).self) {
             _ = try JSONDecoder().decode(Package.Dependency.Evaluation.self, from: data)
         }
     }
@@ -368,7 +368,7 @@ extension `SPM Standard Tests`.Evaluation {
     @Test
     func `absent dependency discriminator is rejected`() throws {
         let data = Data(#"{"productFilter": null}"#.utf8)
-        #expect(throws: (any Swift.Error).self) {
+        #expect(throws: (any Swift::Error).self) {
             _ = try JSONDecoder().decode(Package.Dependency.Evaluation.self, from: data)
         }
     }
@@ -393,11 +393,11 @@ extension `SPM Standard Tests`.Evaluation {
         ]
     )
     func `an empty evaluated identity is rejected`(
-        kind: Swift.String,
-        json: Swift.String
+        kind: Swift::String,
+        json: Swift::String
     ) throws {
         let data = try #require(json.data(using: .utf8))
-        #expect(throws: (any Swift.Error).self, "empty \(kind) identity must be rejected") {
+        #expect(throws: (any Swift::Error).self, "empty \(kind) identity must be rejected") {
             _ = try JSONDecoder().decode(Package.Dependency.Evaluation.self, from: data)
         }
     }
@@ -500,7 +500,7 @@ extension `SPM Standard Tests`.Evaluation {
         #expect(evaluation.platforms?.count == 2)
         #expect(evaluation.dependencies.count == 4)
 
-        let byToken = Swift.Dictionary(
+        let byToken = Swift::Dictionary(
             uniqueKeysWithValues: evaluation.dependencies.map { ($0.identity.underlying, $0) }
         )
 

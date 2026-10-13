@@ -1,12 +1,12 @@
 extension Package.Resolution.Dependency {
 
-    public enum State: Swift.Sendable, Swift.Hashable {
+    public enum State: Swift::Sendable, Swift::Hashable {
 
         case sourceControlCheckout(Package.Resolution.Checkout)
 
-        case fileSystem(path: Swift.String)
+        case fileSystem(path: Swift::String)
 
-        case edited(path: Swift.String, basedOn: Package.Resolution.Dependency.Superseded?)
+        case edited(path: Swift::String, basedOn: Package.Resolution.Dependency.Superseded?)
     }
 }
 
@@ -19,7 +19,7 @@ extension Package.Resolution.Dependency.State {
         }
     }
 
-    public var path: Swift.String? {
+    public var path: Swift::String? {
         switch self {
         case .fileSystem(let path), .edited(let path, _): path
         case .sourceControlCheckout: nil

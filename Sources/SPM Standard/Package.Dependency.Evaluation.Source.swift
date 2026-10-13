@@ -1,8 +1,8 @@
 extension Package.Dependency.Evaluation {
 
-    public enum Source: Swift.Sendable, Swift.Hashable {
+    public enum Source: Swift::Sendable, Swift::Hashable {
 
-        case fileSystem(identity: Package.Dependency.Evaluation.Identity, path: Swift.String)
+        case fileSystem(identity: Package.Dependency.Evaluation.Identity, path: Swift::String)
 
         case sourceControl(
             identity: Package.Dependency.Evaluation.Identity,

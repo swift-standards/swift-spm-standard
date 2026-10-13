@@ -1,6 +1,6 @@
 extension Product {
 
-    public enum Kind: Swift.Sendable, Swift.Hashable {
+    public enum Kind: Swift::Sendable, Swift::Hashable {
 
         case library(LibraryType)
 

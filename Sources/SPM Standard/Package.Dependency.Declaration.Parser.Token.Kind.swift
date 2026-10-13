@@ -1,7 +1,7 @@
 extension Package.Dependency.Declaration.Parser.Token {
     enum Kind: Equatable, Sendable {
-        case identifier(Swift.String)
+        case identifier(Swift::String)
         case punctuation(UInt8)
-        case string(Swift.String, interpolated: Swift.Bool)
+        case string(Swift::String, interpolated: Swift::Bool)
     }
 }

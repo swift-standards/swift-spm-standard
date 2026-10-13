@@ -1,6 +1,6 @@
 #if !hasFeature(Embedded)
     extension Package.Resolution.Checkout: Decodable {
-        private enum CodingKeys: Swift.String, CodingKey {
+        private enum CodingKeys: Swift::String, CodingKey {
             case revision
             case branch
             case version
@@ -8,10 +8,10 @@
 
         public init(from decoder: any Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            let revision = try container.decode(Swift.String.self, forKey: .revision)
+            let revision = try container.decode(Swift::String.self, forKey: .revision)
 
-            let branch = try container.decodeIfPresent(Swift.String.self, forKey: .branch)
-            let version = try container.decodeIfPresent(Swift.String.self, forKey: .version)
+            let branch = try container.decodeIfPresent(Swift::String.self, forKey: .branch)
+            let version = try container.decodeIfPresent(Swift::String.self, forKey: .version)
 
             switch (branch, version) {
             case (.some(let branch), .none):

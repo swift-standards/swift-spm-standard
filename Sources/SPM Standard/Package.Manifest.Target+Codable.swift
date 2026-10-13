@@ -1,6 +1,6 @@
 #if !hasFeature(Embedded)
     extension Package.Manifest.Target: Codable {
-        private enum CodingKeys: Swift.String, CodingKey {
+        private enum CodingKeys: Swift::String, CodingKey {
             case name
             case type
             case dependencies
@@ -9,8 +9,8 @@
 
         public init(from decoder: any Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
-            let nameString = try container.decode(Swift.String.self, forKey: .name)
-            let kindRaw = try container.decode(Swift.String.self, forKey: .type)
+            let nameString = try container.decode(Swift::String.self, forKey: .name)
+            let kindRaw = try container.decode(Swift::String.self, forKey: .type)
             guard let kind = Package::Target.Kind(rawValue: kindRaw) else {
                 throw DecodingError.dataCorruptedError(
                     forKey: .type,
@@ -23,7 +23,7 @@
                     [Package::Target.Dependency].self,
                     forKey: .dependencies
                 ) ?? []
-            let path = try container.decodeIfPresent(Swift.String.self, forKey: .path)
+            let path = try container.decodeIfPresent(Swift::String.self, forKey: .path)
             self.init(
                 name: Package::Target.Name(_unchecked: nameString),
                 kind: kind,

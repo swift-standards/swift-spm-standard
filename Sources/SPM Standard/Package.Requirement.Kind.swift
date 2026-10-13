@@ -1,6 +1,6 @@
 #if !hasFeature(Embedded)
     extension Package.Requirement {
-        enum Kind: Swift.String, Codable {
+        enum Kind: Swift::String, Codable {
             case from
             case upToNextMajor
             case upToNextMinor
