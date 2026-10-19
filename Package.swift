@@ -15,13 +15,13 @@ let package = Package(
         .library(
             name: "SPM Standard",
             targets: ["SPM Standard"]
-        ),
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/swift-atoms/swift-byte.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-package.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-version.git", branch: "main", traits: ["Parser", "Bytes"]),
-        .package(url: "https://github.com/swift-standards/swift-uri-standard.git", branch: "main")
+        .package(url: "https://github.com/swift-standards/swift-uri-standard.git", branch: "main"),
     ],
     targets: [
         .target(
@@ -31,7 +31,7 @@ let package = Package(
                 .product(name: "Package", package: "swift-package"),
                 .product(name: "Version", package: "swift-version"),
                 .product(name: "URI Standard", package: "swift-uri-standard"),
-                .product(name: "URI Standard Library Integration", package: "swift-uri-standard")
+                .product(name: "URI Standard Library Integration", package: "swift-uri-standard"),
             ]
         ),
         .testTarget(
@@ -45,14 +45,15 @@ let package = Package(
 )
 
 for target in package.targets where ![.system, .binary, .plugin, .macro].contains(target.type) {
-    target.swiftSettings = (target.swiftSettings ?? []) + [
-        .strictMemorySafety(),
-        .enableUpcomingFeature("ExistentialAny"),
-        .enableUpcomingFeature("InternalImportsByDefault"),
-        .enableUpcomingFeature("MemberImportVisibility"),
-        .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
-        .enableUpcomingFeature("InferIsolatedConformances"),
-        .enableExperimentalFeature("Lifetimes"),
-        .treatAllWarnings(as: .error),
-    ]
+    target.swiftSettings =
+        (target.swiftSettings ?? []) + [
+            .strictMemorySafety(),
+            .enableUpcomingFeature("ExistentialAny"),
+            .enableUpcomingFeature("InternalImportsByDefault"),
+            .enableUpcomingFeature("MemberImportVisibility"),
+            .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+            .enableUpcomingFeature("InferIsolatedConformances"),
+            .enableExperimentalFeature("Lifetimes"),
+            .treatAllWarnings(as: .error),
+        ]
 }
