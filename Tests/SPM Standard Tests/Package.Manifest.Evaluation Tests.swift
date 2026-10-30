@@ -538,4 +538,65 @@ extension `SPM Standard Tests`.Evaluation {
         let unreferenced = try #require(byToken["swift-unreferenced"])
         #expect(unreferenced.products.isEmpty)
     }
+
+    @Test
+    func `declared traits, conditional trait requests, and target dependency conditions are decoded`() throws {
+        let evaluation = try decodeManifest(
+            """
+            {
+              "name": "m",
+              "toolsVersion": {"_version": "6.1.0"},
+              "dependencies": [
+                {
+                  "fileSystem": [
+                    {
+                      "identity": "b",
+                      "path": "/fixture/b",
+                      "productFilter": null,
+                      "traits": [{"condition": {"traits": ["P"]}, "name": "T"}, {"name": "U"}]
+                    }
+                  ]
+                }
+              ],
+              "products": [],
+              "targets": [
+                {
+                  "name": "M",
+                  "type": "regular",
+                  "dependencies": [
+                    {"product": ["B", "b", null, {"platformNames": ["linux"], "traits": ["Q"]}]},
+                    {"target": ["Support", null]}
+                  ]
+                }
+              ],
+              "traits": [
+                {"enabledTraits": [], "name": "P"},
+                {"enabledTraits": [], "name": "Q"},
+                {"description": "The default traits of this package.", "enabledTraits": ["P"], "name": "default"}
+              ]
+            }
+            """
+        )
+
+        #expect(
+            evaluation.traits == [
+                .init(name: "P"),
+                .init(name: "Q"),
+                .init(name: "default", enabledTraits: ["P"]),
+            ]
+        )
+        #expect(
+            evaluation.dependencies[0].traits == [
+                .init(name: "T", condition: .init(traits: ["P"])),
+                .init(name: "U"),
+            ]
+        )
+        let target = try #require(evaluation.targets.first)
+        #expect(target.dependencies == [.product(name: "B", package: "b"), .target(name: "Support")])
+        #expect(
+            target.conditions == [
+                .product(name: "B", package: "b"): .init(platforms: ["linux"], traits: ["Q"])
+            ]
+        )
+    }
 }

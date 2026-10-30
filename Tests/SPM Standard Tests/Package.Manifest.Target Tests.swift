@@ -25,6 +25,30 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
     }
 
     @Test
+    func `Manifest.Target dependency conditions round-trip through JSON`() throws {
+        let target = Package.Manifest.Target(
+            name: "SPM Standard",
+            kind: .regular,
+            dependencies: [
+                .product(name: "Package", package: "swift-package"),
+                .target(name: "Helpers"),
+                .byName("LooseLiteral"),
+            ],
+            path: nil,
+            conditions: [
+                .product(name: "Package", package: "swift-package"): .init(traits: ["Package"]),
+                .byName("LooseLiteral"): .init(platforms: ["linux"]),
+            ]
+        )
+        let encoded = try JSONEncoder().encode(target)
+        let decoded = try JSONDecoder().decode(
+            Package.Manifest.Target.self,
+            from: encoded
+        )
+        #expect(decoded == target)
+    }
+
+    @Test
     func `Manifest.Target executable round-trips through JSON`() throws {
         let target = Package.Manifest.Target(
             name: "Linter CLI",

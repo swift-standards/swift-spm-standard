@@ -18,17 +18,22 @@
                     debugDescription: "unknown target type '\(kindRaw)'"
                 )
             }
-            let dependencies =
+            let wires =
                 try container.decodeIfPresent(
-                    [Package::Target.Dependency].self,
+                    [_DependencyWire].self,
                     forKey: .dependencies
                 ) ?? []
+            var conditions: [Package::Target.Dependency: Package.Manifest.Condition] = [:]
+            for wire in wires {
+                conditions[wire.dependency] = wire.condition
+            }
             let path = try container.decodeIfPresent(Swift::String.self, forKey: .path)
             self.init(
                 name: Package::Target.Name(_unchecked: nameString),
                 kind: kind,
-                dependencies: dependencies,
-                path: path
+                dependencies: wires.map(\.dependency),
+                path: path,
+                conditions: conditions
             )
         }
 
@@ -37,7 +42,10 @@
             try container.encode(self.name.underlying, forKey: .name)
 
             try container.encode(self.kind.rawValue, forKey: .type)
-            try container.encode(self.dependencies, forKey: .dependencies)
+            try container.encode(
+                self.dependencies.map { _DependencyWire(dependency: $0, condition: self.conditions[$0]) },
+                forKey: .dependencies
+            )
             try container.encodeIfPresent(self.path, forKey: .path)
         }
     }

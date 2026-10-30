@@ -14,13 +14,17 @@ extension Package.Manifest {
 
         public let platforms: [SupportedPlatform]?
 
+        /// The traits the package declares, including `default`.
+        public let traits: [Package.Manifest.Trait]
+
         public init(
             name: Package.Name,
             toolsVersion: Version.Tools,
             dependencies: [Package.Dependency.Evaluation] = [],
             products: [Package.Manifest.Product] = [],
             targets: [Package.Manifest.Target] = [],
-            platforms: [SupportedPlatform]? = nil
+            platforms: [SupportedPlatform]? = nil,
+            traits: [Package.Manifest.Trait] = []
         ) {
             self.name = name
             self.toolsVersion = toolsVersion
@@ -28,6 +32,7 @@ extension Package.Manifest {
             self.products = products
             self.targets = targets
             self.platforms = platforms
+            self.traits = traits
         }
     }
 }

@@ -7,6 +7,7 @@
             case products
             case targets
             case platforms
+            case traits
         }
 
         public init(from decoder: any Decoder) throws {
@@ -62,6 +63,11 @@
                 [SupportedPlatform].self,
                 forKey: .platforms
             )
+            let traits =
+                try container.decodeIfPresent(
+                    [Package.Manifest.Trait].self,
+                    forKey: .traits
+                ) ?? []
 
             self.init(
                 name: name,
@@ -72,7 +78,8 @@
                 ),
                 products: products,
                 targets: targets,
-                platforms: platforms
+                platforms: platforms,
+                traits: traits
             )
         }
     }
@@ -113,7 +120,7 @@
         internal static func _traits(
             _ wire: [_TraitWire]?
         ) -> [Package.Dependency.Evaluation.Trait] {
-            (wire ?? []).map { .init(name: $0.name) }
+            (wire ?? []).map { .init(name: $0.name, condition: $0.condition) }
         }
 
         internal static func _requirement(
