@@ -1,3 +1,5 @@
+public import Path
+
 extension Package.Manifest {
 
     public struct Target: Swift::Sendable, Swift::Hashable {
@@ -8,7 +10,7 @@ extension Package.Manifest {
 
         public let dependencies: [Package::Target.Dependency]
 
-        public let path: Swift::String?
+        public let path: Path::Path?
 
         /// The conditions of those `dependencies` that apply only on some platforms or under some of
         /// the package's traits.
@@ -18,7 +20,7 @@ extension Package.Manifest {
             name: Package::Target.Name,
             kind: Package::Target.Kind,
             dependencies: [Package::Target.Dependency] = [],
-            path: Swift::String? = nil,
+            path: Path::Path? = nil,
             conditions: [Package::Target.Dependency: Package.Manifest.Condition] = [:]
         ) {
             self.name = name

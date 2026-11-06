@@ -1,4 +1,5 @@
 import Foundation
+import Path
 import Testing
 
 @testable import SPM_Standard
@@ -99,7 +100,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
             name: "Custom",
             kind: .regular,
             dependencies: [],
-            path: "Sources/Custom/Override"
+            path: try Path::Path(validating: "Sources/Custom/Override")
         )
         let encoded = try JSONEncoder().encode(target)
         let decoded = try JSONDecoder().decode(
@@ -107,7 +108,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
             from: encoded
         )
         #expect(decoded == target)
-        #expect(decoded.path == "Sources/Custom/Override")
+        #expect(decoded.path?.string == "Sources/Custom/Override")
     }
 
     @Test

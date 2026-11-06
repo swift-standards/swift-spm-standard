@@ -16,7 +16,14 @@
                     debugDescription: "unknown platform name '\(raw)'"
                 )
             }
-            let version = try container.decode(Swift::String.self, forKey: .version)
+            let text = try container.decode(Swift::String.self, forKey: .version)
+            guard let version = Version.Tools(parsing: text) else {
+                throw DecodingError.dataCorruptedError(
+                    forKey: .version,
+                    in: container,
+                    debugDescription: "invalid platform version '\(text)'"
+                )
+            }
             self.init(platform: platform, version: version)
         }
 
@@ -24,7 +31,7 @@
             var container = encoder.container(keyedBy: CodingKeys.self)
 
             try container.encode(self.platform.rawValue, forKey: .platformName)
-            try container.encode(self.version, forKey: .version)
+            try container.encode(self.version.description, forKey: .version)
 
             try container.encode([Swift::String](), forKey: .options)
         }

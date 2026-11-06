@@ -1,4 +1,6 @@
 #if !hasFeature(Embedded)
+    import Path
+
     extension Package.Resolution.Dependency: Decodable {
 
         private enum CodingKeys: Swift::String, CodingKey {
@@ -30,11 +32,11 @@
                 )
 
             case "fileSystem":
-                resolved = .fileSystem(path: try state.decode(Swift::String.self, forKey: .path))
+                resolved = .fileSystem(path: try state.decode(Path::Path.self, forKey: .path))
 
             case "edited":
                 resolved = .edited(
-                    path: try state.decode(Swift::String.self, forKey: .path),
+                    path: try state.decode(Path::Path.self, forKey: .path),
                     basedOn: superseded
                 )
 

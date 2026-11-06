@@ -234,7 +234,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
                 )
             ],
             platforms: [
-                SupportedPlatform(platform: .macOS, version: "26.0")
+                SupportedPlatform(platform: .macOS, version: Version.Tools(major: 26, minor: 0))
             ]
         )
         let encoded = try JSONEncoder().encode(manifest)

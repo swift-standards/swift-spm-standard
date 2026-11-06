@@ -20,6 +20,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/swift-atoms/swift-byte.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-package.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-path.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-version.git", branch: "main", traits: ["Parser", "Bytes"]),
         .package(url: "https://github.com/swift-standards/swift-uri-standard.git", branch: "main"),
     ],
@@ -29,6 +30,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Byte", package: "swift-byte"),
                 .product(name: "Package", package: "swift-package"),
+                .product(name: "Path", package: "swift-path"),
                 .product(name: "Version", package: "swift-version"),
                 .product(name: "URI Standard", package: "swift-uri-standard"),
                 .product(name: "URI Standard Library Integration", package: "swift-uri-standard"),
@@ -37,7 +39,8 @@ let package = Package(
         .testTarget(
             name: "SPM Standard Tests",
             dependencies: [
-                .target(name: "SPM Standard")
+                .target(name: "SPM Standard"),
+                .product(name: "Path", package: "swift-path"),
             ]
         ),
     ],

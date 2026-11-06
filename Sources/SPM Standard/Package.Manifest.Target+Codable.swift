@@ -1,4 +1,6 @@
 #if !hasFeature(Embedded)
+    import Path
+
     extension Package.Manifest.Target: Codable {
         private enum CodingKeys: Swift::String, CodingKey {
             case name
@@ -27,7 +29,7 @@
             for wire in wires {
                 conditions[wire.dependency] = wire.condition
             }
-            let path = try container.decodeIfPresent(Swift::String.self, forKey: .path)
+            let path = try container.decodeIfPresent(Path::Path.self, forKey: .path)
             self.init(
                 name: Package::Target.Name(_unchecked: nameString),
                 kind: kind,

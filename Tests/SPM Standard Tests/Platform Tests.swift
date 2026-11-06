@@ -25,7 +25,7 @@ extension `SPM Standard Tests`.Unit {
 extension `SPM Standard Tests`.`Codable Round-Trip` {
     @Test
     func `SupportedPlatform round-trips through JSON`() throws {
-        let supported = SupportedPlatform(platform: .macOS, version: "26.0")
+        let supported = SupportedPlatform(platform: .macOS, version: Version.Tools(major: 26, minor: 0))
         let encoded = try JSONEncoder().encode(supported)
         let decoded = try JSONDecoder().decode(SupportedPlatform.self, from: encoded)
         #expect(decoded == supported)
@@ -39,7 +39,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
         let data = try #require(json.data(using: .utf8))
         let supported = try JSONDecoder().decode(SupportedPlatform.self, from: data)
         #expect(supported.platform == .macOS)
-        #expect(supported.version == "26.0")
+        #expect(supported.version == Version.Tools(major: 26, minor: 0))
     }
 
     @Test

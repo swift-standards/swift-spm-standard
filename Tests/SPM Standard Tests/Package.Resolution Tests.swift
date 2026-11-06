@@ -1,4 +1,5 @@
 import Foundation
+import Path
 import Testing
 
 @testable import SPM_Standard
@@ -120,7 +121,7 @@ extension `SPM Standard Tests`.Resolution {
               "subpath": "swift-css", "basedOn": null }
             """
         let dependency = try #require(try decode(envelope(record)).dependencies.first)
-        #expect(dependency.state.path == "/fixture/checkouts/swift-css")
+        #expect(dependency.state.path?.string == "/fixture/checkouts/swift-css")
         #expect(dependency.state.checkout == nil)
         #expect(dependency.revision == nil)
     }
@@ -182,7 +183,7 @@ extension `SPM Standard Tests`.Resolution {
             Issue.record("Expected .edited, got \(dependency.state)")
             return
         }
-        #expect(path == "/fixture/edited/swift-parser")
+        #expect(path.string == "/fixture/edited/swift-parser")
 
         #expect(dependency.revision == nil)
 
