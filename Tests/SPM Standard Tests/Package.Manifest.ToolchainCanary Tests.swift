@@ -3,12 +3,12 @@ import Testing
 
 @testable import SPM_Standard
 
-extension `SPM Standard Tests` {
+extension `SPM.Standard Tests`.`SPM Standard Tests` {
 
     @Suite struct `Toolchain Canary` {}
 }
 
-extension `SPM Standard Tests`.`Toolchain Canary` {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.`Toolchain Canary` {
     @Test
     func `captured swift package dump-package output decodes via Package.Manifest Codable`() throws {
         let manifest = try JSONDecoder().decode(

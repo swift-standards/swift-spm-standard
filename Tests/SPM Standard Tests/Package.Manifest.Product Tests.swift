@@ -3,7 +3,7 @@ import Testing
 
 @testable import SPM_Standard
 
-extension `SPM Standard Tests`.`Codable Round-Trip` {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.`Codable Round-Trip` {
     @Test
     func `Manifest.Product library(automatic) round-trips through JSON`() throws {
         let product = Package.Manifest.Product(

@@ -2,7 +2,7 @@ import Testing
 
 @testable import SPM_Standard
 
-extension `SPM Standard Tests`.Unit {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.Unit {
     @Test
     func `Package.Manifest stores name, toolsVersion, dependencies`() throws {
         let manifest = Package.Manifest(
@@ -42,7 +42,7 @@ extension `SPM Standard Tests`.Unit {
     }
 }
 
-extension `SPM Standard Tests`.Unit {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.Unit {
     @Test
     func `Target.Dependency.product carries name and package`() {
         let dependency: Target.Dependency = .product(name: "Bar", package: "swift-bar")

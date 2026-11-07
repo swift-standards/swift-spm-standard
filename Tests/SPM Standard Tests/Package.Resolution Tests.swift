@@ -4,11 +4,11 @@ import Testing
 
 @testable import SPM_Standard
 
-extension `SPM Standard Tests` {
+extension `SPM.Standard Tests`.`SPM Standard Tests` {
     @Suite struct Resolution {}
 }
 
-extension `SPM Standard Tests`.Resolution {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.Resolution {
 
     private func decode(_ json: Swift::String) throws -> Package.Resolution {
         let data = try #require(json.data(using: .utf8))

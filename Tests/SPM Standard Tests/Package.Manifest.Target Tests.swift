@@ -4,7 +4,7 @@ import Testing
 
 @testable import SPM_Standard
 
-extension `SPM Standard Tests`.`Codable Round-Trip` {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.`Codable Round-Trip` {
     @Test
     func `Manifest.Target regular round-trips through JSON`() throws {
         let target = Package.Manifest.Target(
@@ -158,7 +158,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
     }
 }
 
-extension `SPM Standard Tests`.`Codable Round-Trip` {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.`Codable Round-Trip` {
     @Test
     func `Target.Dependency.product round-trips through JSON`() throws {
         let dependency: Target.Dependency = .product(
@@ -196,7 +196,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
     }
 }
 
-extension `SPM Standard Tests`.Unit {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.Unit {
     @Test
     func `Target.Kind has all seven SwiftPM kinds`() {
 

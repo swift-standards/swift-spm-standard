@@ -3,15 +3,22 @@ import Testing
 
 @testable import SPM_Standard
 
-@Suite
-struct `SPM Standard Tests` {
-    @Suite struct Unit {}
-    @Suite struct `Codable Round-Trip` {}
-    @Suite struct `Edge Case` {}
-    @Suite struct Integration {}
+enum `SPM.Standard Tests` {}
+
+extension `SPM.Standard Tests` {
+    @Suite
+    struct `SPM Standard Tests` {
+        @Suite struct Unit {}
+        @Suite struct `Edge Case` {}
+        @Suite struct Integration {}
+    }
 }
 
-extension `SPM Standard Tests`.`Codable Round-Trip` {
+extension `SPM.Standard Tests`.`SPM Standard Tests` {
+    @Suite struct `Codable Round-Trip` {}
+}
+
+extension `SPM.Standard Tests`.`SPM Standard Tests`.`Codable Round-Trip` {
     @Test
     func `Package.Identity round-trips through JSON`() throws {
         let identity = Package.Identity(scope: "apple", name: "swift-argument-parser")
@@ -103,7 +110,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
     }
 }
 
-extension `SPM Standard Tests`.Unit {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.Unit {
     @Test
     func `Package.Identity has scope and name`() {
         let identity = Package.Identity(scope: "apple", name: "swift-argument-parser")

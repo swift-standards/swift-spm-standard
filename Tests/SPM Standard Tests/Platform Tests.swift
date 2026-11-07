@@ -3,7 +3,7 @@ import Testing
 
 @testable import SPM_Standard
 
-extension `SPM Standard Tests`.Unit {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.Unit {
     @Test
     func `Platform raw values match dump-package wire tokens (lowercase)`() {
         #expect(Platform.macOS.rawValue == "macos")
@@ -22,7 +22,7 @@ extension `SPM Standard Tests`.Unit {
     }
 }
 
-extension `SPM Standard Tests`.`Codable Round-Trip` {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.`Codable Round-Trip` {
     @Test
     func `SupportedPlatform round-trips through JSON`() throws {
         let supported = SupportedPlatform(platform: .macOS, version: Version.Tools(major: 26, minor: 0))

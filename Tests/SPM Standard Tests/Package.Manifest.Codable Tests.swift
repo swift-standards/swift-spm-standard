@@ -3,7 +3,7 @@ import Testing
 
 @testable import SPM_Standard
 
-extension `SPM Standard Tests`.`Codable Round-Trip` {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.`Codable Round-Trip` {
 
     @Test
     func `decodes dump-package output ignoring extras (path-form dep)`() throws {

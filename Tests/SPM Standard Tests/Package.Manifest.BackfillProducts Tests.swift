@@ -3,7 +3,7 @@ import Testing
 
 @testable import SPM_Standard
 
-extension `SPM Standard Tests`.`Codable Round-Trip` {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.`Codable Round-Trip` {
 
     @Test
     func `Package.Manifest decode populates Dependency.products from target edges`() throws {
@@ -126,7 +126,7 @@ extension `SPM Standard Tests`.`Codable Round-Trip` {
     }
 }
 
-extension `SPM Standard Tests`.`Codable Round-Trip` {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.`Codable Round-Trip` {
 
     @Test
     func `Package.Manifest decodes a full dump-package output (products + targets + platforms)`()

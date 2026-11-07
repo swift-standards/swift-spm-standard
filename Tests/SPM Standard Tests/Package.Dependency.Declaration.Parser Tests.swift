@@ -2,11 +2,11 @@ import Testing
 
 @testable import SPM_Standard
 
-extension `SPM Standard Tests` {
+extension `SPM.Standard Tests`.`SPM Standard Tests` {
     @Suite struct `Declaration Parser` {}
 }
 
-extension `SPM Standard Tests`.`Declaration Parser` {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.`Declaration Parser` {
     @Test
     func `Parser preserves URL strings and ignores line and nested block comments`()
         throws(Package.Dependency.Declaration.Parser.Error)

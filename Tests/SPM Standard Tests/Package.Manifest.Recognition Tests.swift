@@ -3,11 +3,11 @@ import Testing
 
 @testable import SPM_Standard
 
-extension `SPM Standard Tests` {
+extension `SPM.Standard Tests`.`SPM Standard Tests` {
     @Suite struct `Manifest Recognition` {}
 }
 
-extension `SPM Standard Tests`.`Manifest Recognition` {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.`Manifest Recognition` {
     private static func recognizes(_ source: Swift::String) -> Swift::Bool {
         Package.Manifest.recognizes(Array(utf8: source))
     }

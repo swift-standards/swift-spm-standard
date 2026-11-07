@@ -3,11 +3,11 @@ import Testing
 
 @testable import SPM_Standard
 
-extension `SPM Standard Tests` {
+extension `SPM.Standard Tests`.`SPM Standard Tests` {
     @Suite struct Evaluation {}
 }
 
-extension `SPM Standard Tests`.Evaluation {
+extension `SPM.Standard Tests`.`SPM Standard Tests`.Evaluation {
 
     private func decodeDependency(_ json: Swift::String) throws -> Package.Dependency.Evaluation {
         let data = try #require(json.data(using: .utf8))
