@@ -26,10 +26,6 @@ extension Package.Manifest {
             {
                 return true
             }
-            // The tokenizer keeps no `=`, so `let package = Package(` and
-            // `let package: Package = Package(` arrive as `let package Package (`
-            // and `let package : Package Package (`: a `Package (` call within
-            // the next three tokens.
             guard kinds[index] == .identifier("let") || kinds[index] == .identifier("var"),
                 index + 1 < kinds.count,
                 kinds[index + 1] == .identifier("package")
