@@ -1,5 +1,4 @@
 extension Package.Manifest {
-
     internal struct _RequirementWire: Codable {
         let exact: [Swift::String]?
         let range: [_RangeBounds]?
@@ -52,29 +51,30 @@ extension Package.Manifest {
                 self.init(range: [_RangeBounds(lowerBound: v.description, upperBound: upper)])
             }
         }
+    }
+}
 
-        func toRequirement() throws -> Package.Requirement {
-            if let v = exact?.first {
-                return .exact(try _parseSemantic(v))
-            }
-            if let bounds = range?.first {
-                let lower = try _parseSemantic(bounds.lowerBound)
-                let upper = try _parseSemantic(bounds.upperBound)
-                return lower..<upper
-            }
-            if let name = branch?.first {
-                return .branch(name)
-            }
-            if let sha = revision?.first {
-                return .revision(sha)
-            }
-            throw DecodingError.dataCorrupted(
-                DecodingError.Context(
-                    codingPath: [],
-                    debugDescription: "Requirement matched none of exact/range/branch/revision"
-                )
-            )
+extension Package.Manifest._RequirementWire {
+    func toRequirement() throws -> Package.Requirement {
+        if let v = exact?.first {
+            return .exact(try _parseSemantic(v))
         }
-
+        if let bounds = range?.first {
+            let lower = try _parseSemantic(bounds.lowerBound)
+            let upper = try _parseSemantic(bounds.upperBound)
+            return lower..<upper
+        }
+        if let name = branch?.first {
+            return .branch(name)
+        }
+        if let sha = revision?.first {
+            return .revision(sha)
+        }
+        throw DecodingError.dataCorrupted(
+            DecodingError.Context(
+                codingPath: [],
+                debugDescription: "Requirement matched none of exact/range/branch/revision"
+            )
+        )
     }
 }
