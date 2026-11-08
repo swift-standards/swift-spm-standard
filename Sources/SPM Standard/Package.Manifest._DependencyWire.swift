@@ -1,4 +1,5 @@
 extension Package.Manifest {
+
     internal struct _DependencyWire: Codable {
         let fileSystem: [_FileSystemRecord]?
         let sourceControl: [_SourceControlRecord]?
@@ -40,56 +41,55 @@ extension Package.Manifest {
                 ])
             }
         }
-    }
-}
 
-extension Package.Manifest._DependencyWire {
-    func toDependency() throws -> Package.Dependency {
-        if let record = fileSystem?.first {
-            return Package.Dependency(
-                source: .path(record.path),
-                name: Package.Name(_unchecked: record.identity),
-                products: []
-            )
-        }
-        if let record = sourceControl?.first {
-            let urlString = record.location.remote.first?.urlString ?? ""
-            let url: URI
-            do {
-                url = try URI(urlString)
-            } catch {
-                throw DecodingError.dataCorrupted(
-                    DecodingError.Context(
-                        codingPath: [],
-                        debugDescription:
-                            "Invalid URI '\(urlString)' in sourceControl dependency: \(error)"
-                    )
+        func toDependency() throws -> Package.Dependency {
+            if let record = fileSystem?.first {
+                return Package.Dependency(
+                    source: .path(record.path),
+                    name: Package.Name(_unchecked: record.identity),
+                    products: []
                 )
             }
-            let requirement = try record.requirement.toRequirement()
-            return Package.Dependency(
-                source: .url(url, requirement),
-                name: Package.Name(_unchecked: record.identity),
-                products: []
+            if let record = sourceControl?.first {
+                let urlString = record.location.remote.first?.urlString ?? ""
+                let url: URI
+                do {
+                    url = try URI(urlString)
+                } catch {
+                    throw DecodingError.dataCorrupted(
+                        DecodingError.Context(
+                            codingPath: [],
+                            debugDescription:
+                                "Invalid URI '\(urlString)' in sourceControl dependency: \(error)"
+                        )
+                    )
+                }
+                let requirement = try record.requirement.toRequirement()
+                return Package.Dependency(
+                    source: .url(url, requirement),
+                    name: Package.Name(_unchecked: record.identity),
+                    products: []
+                )
+            }
+            if let record = registry?.first {
+                let requirement = try record.requirement.toRequirement()
+                return Package.Dependency(
+                    source: .registry(
+                        try _parseIdentity(record.identity),
+                        requirement
+                    ),
+                    name: Package.Name(_unchecked: record.identity),
+                    products: []
+                )
+            }
+            throw DecodingError.dataCorrupted(
+                DecodingError.Context(
+                    codingPath: [],
+                    debugDescription:
+                        "Dependency record matched none of fileSystem/sourceControl/registry"
+                )
             )
         }
-        if let record = registry?.first {
-            let requirement = try record.requirement.toRequirement()
-            return Package.Dependency(
-                source: .registry(
-                    try _parseIdentity(record.identity),
-                    requirement
-                ),
-                name: Package.Name(_unchecked: record.identity),
-                products: []
-            )
-        }
-        throw DecodingError.dataCorrupted(
-            DecodingError.Context(
-                codingPath: [],
-                debugDescription:
-                    "Dependency record matched none of fileSystem/sourceControl/registry"
-            )
-        )
+
     }
 }

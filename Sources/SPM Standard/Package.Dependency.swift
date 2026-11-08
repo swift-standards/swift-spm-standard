@@ -1,5 +1,16 @@
 extension Package {
+
     public struct Dependency: Swift::Sendable, Swift::Hashable {
+
+        public enum Source: Swift::Sendable, Swift::Hashable {
+
+            case path(Swift::String)
+
+            case url(URI, Package.Requirement)
+
+            case registry(Package.Identity, Package.Requirement)
+        }
+
         public let source: Source
 
         public let name: Package.Name
@@ -11,15 +22,5 @@ extension Package {
             self.name = name
             self.products = products
         }
-    }
-}
-
-extension Package.Dependency {
-    public enum Source: Swift::Sendable, Swift::Hashable {
-        case path(Swift::String)
-
-        case url(URI, Package.Requirement)
-
-        case registry(Package.Identity, Package.Requirement)
     }
 }
