@@ -33,11 +33,13 @@
             }
             toolsVersion = parsedTools
             let wireDependencies = try container.decode(
-                [_DependencyWire].self,
+                [Package.Manifest.Evaluation._DependencyWire].self,
                 forKey: .dependencies
             )
-            let baseDependencies = try wireDependencies.map { wire in
-                try wire.toDependency()
+            var baseDependencies: [Package.Dependency] = []
+            baseDependencies.reserveCapacity(wireDependencies.count)
+            for wire in wireDependencies {
+                baseDependencies.append(try Self._dependency(Package.Dependency.Evaluation(wire)))
             }
             let products =
                 try container.decodeIfPresent(
@@ -76,7 +78,11 @@
                 _ToolsVersionWire(_version: self.toolsVersion.description),
                 forKey: .toolsVersion
             )
-            let wireDependencies = self.dependencies.map { _DependencyWire(from: $0) }
+            var wireDependencies: [_DependencyWire] = []
+            wireDependencies.reserveCapacity(self.dependencies.count)
+            for dependency in self.dependencies {
+                wireDependencies.append(try _DependencyWire(from: dependency))
+            }
             try container.encode(wireDependencies, forKey: .dependencies)
             try container.encode(self.products, forKey: .products)
             try container.encode(self.targets, forKey: .targets)
@@ -128,6 +134,32 @@
             let scope = Swift::String(string[..<dot])
             let name = Swift::String(string[string.index(after: dot)...])
             return Package.Identity(scope: scope, name: name)
+        }
+
+        internal static func _dependency(
+            _ evaluation: Package.Dependency.Evaluation
+        ) throws(DecodingError) -> Package.Dependency {
+            let source: Package.Dependency.Source
+            switch evaluation.source {
+            case .fileSystem(_, let path):
+                source = .path(path)
+
+            case .sourceControl(_, .remote(let url), let requirement):
+                source = .url(url, requirement)
+
+            case .sourceControl(_, .local(let path), _):
+                throw Package.Manifest.Evaluation._corrupt(
+                    "sourceControl.location.local '\(path)' has no Package.Dependency.Source; decode Package.Manifest.Evaluation to read a local source-control dependency"
+                )
+
+            case .registry(let identity, let requirement):
+                source = .registry(identity, requirement)
+            }
+            return Package.Dependency(
+                source: source,
+                name: Package.Name(_unchecked: evaluation.identity.underlying),
+                products: []
+            )
         }
 
         internal static func _backfillProducts(

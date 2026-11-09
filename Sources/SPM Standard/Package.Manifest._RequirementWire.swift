@@ -18,23 +18,27 @@ extension Package.Manifest {
             self.revision = revision
         }
 
-        init(from requirement: Package.Requirement) {
+        init(from requirement: Package.Requirement) throws(EncodingError) {
             switch requirement {
             case .exact(let version):
                 self.init(exact: [version.description])
 
             case .range(let r):
-                let lower: Swift::String
-                let upper: Swift::String
-                switch r.lowerBound {
-                case .inclusive(let v), .exclusive(let v): lower = v.description
-                case .unbounded: lower = ""
+                guard case .inclusive(let lower) = r.lowerBound,
+                    case .exclusive(let upper) = r.upperBound
+                else {
+                    throw EncodingError.invalidValue(
+                        requirement,
+                        EncodingError.Context(
+                            codingPath: [],
+                            debugDescription:
+                                "a manifest range is lower-inclusive and upper-exclusive; unbounded, exclusive lower and inclusive upper bounds are not part of the SwiftPM wire format"
+                        )
+                    )
                 }
-                switch r.upperBound {
-                case .inclusive(let v), .exclusive(let v): upper = v.description
-                case .unbounded: upper = ""
-                }
-                self.init(range: [_RangeBounds(lowerBound: lower, upperBound: upper)])
+                self.init(
+                    range: [_RangeBounds(lowerBound: lower.description, upperBound: upper.description)]
+                )
 
             case .branch(let name):
                 self.init(branch: [name])

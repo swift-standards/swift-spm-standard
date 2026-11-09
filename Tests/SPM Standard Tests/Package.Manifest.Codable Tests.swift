@@ -346,4 +346,134 @@ extension `SPM.Standard Tests`.`SPM Standard Tests`.`Codable Round-Trip` {
         let decoded = try JSONDecoder().decode(Package.Manifest.self, from: encoded)
         #expect(decoded == manifest)
     }
+
+    static func manifest(_ requirement: Package.Requirement) -> Package.Manifest {
+        Package.Manifest(
+            name: "swift-foo",
+            toolsVersion: Version.Tools(major: 6, minor: 3, patch: 1),
+            dependencies: [
+                Package.Dependency(
+                    source: .url("https://example.com/swift-bar.git", requirement),
+                    name: "swift-bar",
+                    products: []
+                )
+            ]
+        )
+    }
+
+    @Test(arguments: [
+        (
+            Package.Requirement.from(Version.Semantic(major: 1, minor: 2, patch: 3)),
+            Version.Semantic(major: 1, minor: 2, patch: 3), Version.Semantic(major: 2, minor: 0, patch: 0)
+        ),
+        (
+            .upToNextMajor(from: Version.Semantic(major: 1, minor: 2, patch: 3)),
+            Version.Semantic(major: 1, minor: 2, patch: 3), Version.Semantic(major: 2, minor: 0, patch: 0)
+        ),
+        (
+            .upToNextMinor(from: Version.Semantic(major: 1, minor: 2, patch: 3)),
+            Version.Semantic(major: 1, minor: 2, patch: 3), Version.Semantic(major: 1, minor: 3, patch: 0)
+        ),
+    ])
+    func `a manifest round trip turns from and upToNext requirements into a lower-inclusive upper-exclusive range`(
+        requirement: Package.Requirement,
+        lower: Version.Semantic,
+        upper: Version.Semantic
+    ) throws {
+        let encoded = try JSONEncoder().encode(Self.manifest(requirement))
+        let decoded = try JSONDecoder().decode(Package.Manifest.self, from: encoded)
+        guard case .url(_, let decodedRequirement) = decoded.dependencies[0].source else {
+            Issue.record("expected .url source")
+            return
+        }
+        #expect(
+            decodedRequirement
+                == .range(Version.Range(lowerBound: .inclusive(lower), upperBound: .exclusive(upper)))
+        )
+    }
+
+    @Test(arguments: [
+        Version.Range<Version.Semantic>(
+            lowerBound: .unbounded,
+            upperBound: .exclusive(Version.Semantic(major: 2, minor: 0, patch: 0))
+        ),
+        Version.Range<Version.Semantic>(
+            lowerBound: .inclusive(Version.Semantic(major: 1, minor: 0, patch: 0)),
+            upperBound: .unbounded
+        ),
+        Version.Range<Version.Semantic>(
+            lowerBound: .exclusive(Version.Semantic(major: 1, minor: 0, patch: 0)),
+            upperBound: .exclusive(Version.Semantic(major: 2, minor: 0, patch: 0))
+        ),
+        Version.Range<Version.Semantic>(
+            lowerBound: .inclusive(Version.Semantic(major: 1, minor: 0, patch: 0)),
+            upperBound: .inclusive(Version.Semantic(major: 2, minor: 0, patch: 0))
+        ),
+    ])
+    func `encoding a manifest range the wire format cannot hold throws`(range: Version.Range<Version.Semantic>) {
+        #expect(throws: EncodingError.self) {
+            try JSONEncoder().encode(Self.manifest(.range(range)))
+        }
+    }
+
+    @Test
+    func `a manifest refuses a local sourceControl location it cannot hold, which the evaluation keeps`() throws {
+        let json = """
+            {
+              "name": "swift-foo",
+              "toolsVersion": {"_version": "6.3.1"},
+              "dependencies": [
+                {
+                  "sourceControl": [
+                    {
+                      "identity": "swift-bar",
+                      "location": {"local": ["/fixture/swift-bar"]},
+                      "requirement": {"branch": ["main"]}
+                    }
+                  ]
+                }
+              ]
+            }
+            """
+        let data = try #require(json.data(using: .utf8))
+        #expect(throws: DecodingError.self) {
+            try JSONDecoder().decode(Package.Manifest.self, from: data)
+        }
+        let evaluation = try JSONDecoder().decode(Package.Manifest.Evaluation.self, from: data)
+        guard case .sourceControl(_, .local(let path), _) = evaluation.dependencies[0].source else {
+            Issue.record("expected a local sourceControl source")
+            return
+        }
+        #expect(path == "/fixture/swift-bar")
+    }
+
+    @Test
+    func `a manifest refuses a dependency with two sourceControl records`() throws {
+        let json = """
+            {
+              "name": "swift-foo",
+              "toolsVersion": {"_version": "6.3.1"},
+              "dependencies": [
+                {
+                  "sourceControl": [
+                    {
+                      "identity": "swift-bar",
+                      "location": {"remote": [{"urlString": "https://example.com/swift-bar.git"}]},
+                      "requirement": {"branch": ["main"]}
+                    },
+                    {
+                      "identity": "swift-baz",
+                      "location": {"remote": [{"urlString": "https://example.com/swift-baz.git"}]},
+                      "requirement": {"branch": ["main"]}
+                    }
+                  ]
+                }
+              ]
+            }
+            """
+        let data = try #require(json.data(using: .utf8))
+        #expect(throws: DecodingError.self) {
+            try JSONDecoder().decode(Package.Manifest.self, from: data)
+        }
+    }
 }
